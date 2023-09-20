@@ -22,6 +22,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { CardModule } from 'primeng/card';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { CalendarModule } from 'primeng/calendar';
+import { KeyFilterModule } from 'primeng/keyfilter';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CalendarModule } from 'primeng/calendar';
     ScrollTopModule,
     CardModule,
     TabMenuModule,
-    CalendarModule
+    CalendarModule,
+    KeyFilterModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

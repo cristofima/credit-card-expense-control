@@ -5,15 +5,41 @@
 <p-scrollTop></p-scrollTop>
 
 <div class="card">
-  <p-table [value]="transactions" [tableStyle]="{'min-width': '60rem'}">
+  <p-table [value]="transactions" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="10"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
     <ng-template pTemplate="caption">Transacciones</ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="description">Descripción <p-sortIcon field="name"></p-sortIcon></th>
-        <th pSortableColumn="brand">Tarjeta <p-sortIcon field="brand"></p-sortIcon></th>
-        <th pSortableColumn="last4Digits">Fecha de Compra <p-sortIcon field="last4Digits"></p-sortIcon></th>
-        <th pSortableColumn="cutOffDate">Monto Total <p-sortIcon field="cutOffDate"></p-sortIcon></th>
-        <th pSortableColumn="expirationDate">Cuotas <p-sortIcon field="expirationDate"></p-sortIcon></th>
+        <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
+        <th pSortableColumn="creditCard.name">Tarjeta <p-sortIcon field="creditCard.name"></p-sortIcon></th>
+        <th pSortableColumn="date">Fecha de Compra <p-sortIcon field="date"></p-sortIcon></th>
+        <th pSortableColumn="amount">Monto Total <p-sortIcon field="amount"></p-sortIcon></th>
+        <th pSortableColumn="quotas"># Cuotas <p-sortIcon field="quotas"></p-sortIcon></th>
+        <th></th>
+      </tr>
+      <tr>
+        <th>
+          <p-columnFilter type="text" field="description"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter field="creditCard.name" matchMode="equals" [showMenu]="false">
+            <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+              <p-dropdown [ngModel]="value" [options]="creditCards" (onChange)="filter($event.value)"
+                placeholder="Seleccionar" [filter]="true" [showClear]="true" optionValue="name" optionLabel="name">
+              </p-dropdown>
+            </ng-template>
+          </p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="date" field="date" display="menu"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="numeric" field="amount" display="menu" currency="USD"></p-columnFilter>
+        </th>
+        <th>
+          <p-columnFilter type="numeric" field="quotas" display="menu"></p-columnFilter>
+        </th>
         <th></th>
       </tr>
     </ng-template>
@@ -32,6 +58,11 @@
               title="Eliminar"></p-button>
           </div>
         </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" style="text-align: center;">No hay registros</td>
       </tr>
     </ng-template>
   </p-table>

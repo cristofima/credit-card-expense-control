@@ -18,6 +18,7 @@ export class CreditCardsComponent implements OnInit {
   visible = false;
   isEdit = false;
   private selectedCreditCard?: CreditCardModel;
+  nonNegativeNumbers: RegExp = /\d+/;
 
   formGroup!: FormGroup;
 
@@ -29,7 +30,7 @@ export class CreditCardsComponent implements OnInit {
       brand: new FormControl('', Validators.compose([Validators.required])),
       expirationMonth: new FormControl('', Validators.compose([Validators.required])),
       expirationYear: new FormControl('', Validators.compose([Validators.required])),
-      last4Digits: new FormControl('', Validators.compose([Validators.required])),
+      last4Digits: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])),
       cutOffDate: new FormControl('', Validators.compose([Validators.required]))
     });
   }

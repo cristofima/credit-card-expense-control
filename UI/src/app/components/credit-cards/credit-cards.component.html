@@ -20,8 +20,8 @@
       <tr>
         <td>{{card.name}}</td>
         <td>{{card.brand}}</td>
-        <td>{{card.last4Digits}}</td>
-        <td>{{card.cutOffDate}}</td>
+        <td style="text-align: right;">{{card.last4Digits}}</td>
+        <td style="text-align: right;">{{card.cutOffDate}}</td>
         <td>{{card.expirationMonth}} / {{card.expirationYear}}</td>
         <td>
           <div class="flex flex-wrap gap-3 justify-content-center">
@@ -34,7 +34,8 @@
   </p-table>
 </div>
 
-<p-dialog header="Nueva tarjeta" [(visible)]="visible" [style]="{width: '30vw'}" [modal]="true" [draggable]="false">
+<p-dialog header="{{isEdit ? 'Editar' : 'Nueva'}} tarjeta" [(visible)]="visible" [style]="{width: '30vw'}"
+  [modal]="true" [draggable]="false">
   <form [formGroup]="formGroup">
     <div class="card flex flex-wrap gap-3 p-fluid">
       <div class="flex flex-column gap-2">
@@ -43,7 +44,8 @@
         <label for="brand">Marca</label>
         <input pInputText id="brand" formControlName="brand" />
         <label for="last4Digits">Últimos 4 dígitos</label>
-        <input pInputText id="last4Digits" formControlName="last4Digits" />
+        <input pInputText id="last4Digits" [pKeyFilter]="nonNegativeNumbers" formControlName="last4Digits"
+          [maxlength]="4" />
         <label for="cutOffDate">Día de corte</label>
         <p-inputNumber inputId="cutOffDate" formControlName="cutOffDate" [min]="1" [max]="31"> </p-inputNumber>
         <label for="expirationMonth">Mes de expiración</label>
