@@ -1,0 +1,66 @@
+<br />
+<p-confirmDialog [style]="{width: '30vw'}" rejectButtonStyleClass="p-button-outlined"></p-confirmDialog>
+<p-button (click)="showDialog()" label="Nueva transacción"></p-button>
+<br />
+<p-scrollTop></p-scrollTop>
+
+<div class="card">
+  <p-table [value]="transactions" [tableStyle]="{'min-width': '60rem'}">
+    <ng-template pTemplate="caption">Transacciones</ng-template>
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="description">Descripción <p-sortIcon field="name"></p-sortIcon></th>
+        <th pSortableColumn="brand">Tarjeta <p-sortIcon field="brand"></p-sortIcon></th>
+        <th pSortableColumn="last4Digits">Fecha de Compra <p-sortIcon field="last4Digits"></p-sortIcon></th>
+        <th pSortableColumn="cutOffDate">Monto Total <p-sortIcon field="cutOffDate"></p-sortIcon></th>
+        <th pSortableColumn="expirationDate">Cuotas <p-sortIcon field="expirationDate"></p-sortIcon></th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transaction>
+      <tr>
+        <td>{{transaction.description}}</td>
+        <td>{{transaction.creditCard.name}}</td>
+        <td>{{transaction.date | date}}</td>
+        <td style="text-align: right;">{{transaction.amount | currency}}</td>
+        <td style="text-align: right;">{{transaction.quotas}}</td>
+        <td>
+          <div class="flex flex-wrap gap-3 justify-content-center">
+            <p-button (onClick)="showDialog(transaction)" icon="pi pi-pencil" styleClass="p-button-success"
+              title="Editar"></p-button>
+            <p-button (onClick)="deleteTransaction(transaction)" icon="pi pi-trash" styleClass="p-button-danger"
+              title="Eliminar"></p-button>
+          </div>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>
+
+<p-dialog header="{{isEdit ? 'Editar' : 'Nueva'}} transacción" [(visible)]="visible" [style]="{width: '30vw'}"
+  [modal]="true" [draggable]="false">
+  <form [formGroup]="formGroup">
+    <div class="card flex flex-wrap gap-3 p-fluid">
+      <div class="flex flex-column gap-2">
+        <label for="description">Descripción</label>
+        <input pInputText id="description" formControlName="description" />
+        <label for="creditCardId">Tarjeta</label>
+        <p-dropdown [options]="creditCards" formControlName="creditCardId" placeholder="Seleccionar"
+          inputId="creditCardId" [filter]="true" optionValue="id" optionLabel="name" appendTo="body"></p-dropdown>
+        <label for="date">Fecha de Compra</label>
+        <p-calendar inputId="date" formControlName="date" appendTo="body" [showIcon]="true" [readonlyInput]="true"
+          [showButtonBar]="true"></p-calendar>
+        <label for="amount">Monto Total</label>
+        <p-inputNumber inputId="amount" formControlName="amount" [min]="0.01" mode="decimal" [maxFractionDigits]="2">
+        </p-inputNumber>
+        <label for="quotas">Número de cuotas</label>
+        <p-inputNumber inputId="quotas" formControlName="quotas" [min]="1"> </p-inputNumber>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <p-button (click)="saveTransaction()" label="Guardar" [disabled]="!formGroup.valid"></p-button>
+  </ng-template>
+
+</p-dialog>
