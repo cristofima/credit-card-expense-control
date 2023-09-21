@@ -16,6 +16,7 @@
         <th pSortableColumn="date">Fecha de Compra <p-sortIcon field="date"></p-sortIcon></th>
         <th pSortableColumn="amount">Monto Total <p-sortIcon field="amount"></p-sortIcon></th>
         <th pSortableColumn="quotas"># Cuotas <p-sortIcon field="quotas"></p-sortIcon></th>
+        <th pSortableColumn="aproxMonthlyQuota">Cuota mensual <p-sortIcon field="aproxMonthlyQuota"></p-sortIcon></th>
         <th></th>
       </tr>
       <tr>
@@ -40,6 +41,9 @@
         <th>
           <p-columnFilter type="numeric" field="quotas" display="menu"></p-columnFilter>
         </th>
+        <th>
+          <p-columnFilter type="numeric" field="aproxMonthlyQuota" display="menu"></p-columnFilter>
+        </th>
         <th></th>
       </tr>
     </ng-template>
@@ -50,6 +54,7 @@
         <td>{{transaction.date | date}}</td>
         <td style="text-align: right;">{{transaction.amount | currency}}</td>
         <td style="text-align: right;">{{transaction.quotas}}</td>
+        <td style="text-align: right;">{{transaction.aproxMonthlyQuota | currency}}</td>
         <td>
           <div class="flex flex-wrap gap-3 justify-content-center">
             <p-button (onClick)="showDialog(transaction)" icon="pi pi-pencil" styleClass="p-button-success"
@@ -62,7 +67,7 @@
     </ng-template>
     <ng-template pTemplate="emptymessage">
       <tr>
-        <td colspan="6" style="text-align: center;">No hay registros</td>
+        <td colspan="7" style="text-align: center;">No hay registros</td>
       </tr>
     </ng-template>
   </p-table>

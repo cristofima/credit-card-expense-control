@@ -1,8 +1,12 @@
 <div class="card">
   <br />
 
+  <p-dropdown [(ngModel)]="year" [options]="yearOptions" (onChange)="onChangeYear()"></p-dropdown>
+
+  <br />
+
   <p-table [value]="report" [tableStyle]="{'min-width': '70rem'}">
-    <ng-template pTemplate="caption">Año actual ({{year}})</ng-template>
+    <ng-template pTemplate="caption">Año {{year}}</ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th>Tarjeta</th>
@@ -58,9 +62,13 @@
 
   <br />
 
+  <p-dropdown [(ngModel)]="month" [options]="monthOptions" (onChange)="onChangeMonth()"></p-dropdown>
+
+  <br />
+
   <p-table [value]="transactionsReport" sortField="creditCard.name" sortMode="single" dataKey="creditCard.id"
     rowGroupMode="subheader" groupRowsBy="creditCard.id" [tableStyle]="{'min-width': '70rem'}">
-    <ng-template pTemplate="caption">Mes actual ({{stringMonth}})</ng-template>
+    <ng-template pTemplate="caption">Mes {{stringMonth}}</ng-template>
     <ng-template pTemplate="header">
       <tr>
         <th>Tienda</th>

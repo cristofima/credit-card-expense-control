@@ -17,4 +17,5 @@ export interface ReportTransactionModel {
   description: string;
   amount: number;
   quotas: number;
+  aproxMonthlyQuota: number;
 }

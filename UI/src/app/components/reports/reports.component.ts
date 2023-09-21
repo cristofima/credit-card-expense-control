@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SelectItem } from 'primeng/api';
 import { CreditCardModel } from 'src/app/models/credit-card.model';
 import { ReportModel } from 'src/app/models/report.model';
 import { ReportTransactionModel } from 'src/app/models/transaction.model';
@@ -23,15 +24,43 @@ export class ReportsComponent implements OnInit {
   month!: number;
   stringMonth!: string;
 
+  yearOptions: SelectItem[] = [];
+  monthOptions: SelectItem[] = [];
+
   ngOnInit(): void {
     let today = new Date();
     this.year = today.getFullYear();
     this.month = today.getMonth() + 1;
-    this.stringMonth = today.toLocaleString('es-EC', { month: 'long' });
-    this.report = this.reportService.getTransactionsReportByYear(this.year);
-    this.calculateTotalByMonth();
+    this.buildYearOptions();
+    this.buildMonthOptions();
 
     this.creditCards = this.creditCardService.getCreditCards();
+    this.onChangeYear();
+  }
+
+  private buildYearOptions() {
+    for (let y = this.year - 1; y <= this.year + 2; y++) {
+      this.yearOptions.push({ label: y.toString(), value: y });
+    }
+  }
+
+  private buildMonthOptions() {
+    const months = Array.from({ length: 12 }, (_, index) => index + 1);
+    months.forEach(month => {
+      let stringMonth = new Date(this.year, month - 1).toLocaleString('es-EC', { month: 'long' });
+      this.monthOptions.push({ label: stringMonth, value: month });
+    });
+  }
+
+  onChangeYear() {
+    this.report = this.reportService.getTransactionsReportByYear(this.year);
+    this.calculateTotalByMonth();
+    this.onChangeMonth();
+  }
+
+  onChangeMonth() {
+    this.stringMonth = new Date(this.year, this.month - 1).toLocaleString('es-EC', { month: 'long' });
+    this.transactionsReport = [];
     this.creditCards.forEach(creditCard => {
       let arr = this.reportService.getReportTransactions(creditCard, this.month, this.year);
       this.transactionsReport = this.transactionsReport.concat(arr);
@@ -49,7 +78,7 @@ export class ReportsComponent implements OnInit {
     return total;
   }
 
-  calculateTotalByMonth() {
+  private calculateTotalByMonth() {
     this.summary = {
       january: 0,
       february: 0,

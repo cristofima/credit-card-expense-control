@@ -30,7 +30,8 @@ export class TransactionService {
         date: transaction.date,
         description: transaction.description,
         amount: transaction.amount,
-        quotas: transaction.quotas
+        quotas: transaction.quotas,
+        aproxMonthlyQuota: transaction.amount / transaction.quotas
       };
 
       return rt;
