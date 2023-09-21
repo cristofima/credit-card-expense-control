@@ -1,6 +1,10 @@
 export interface ReportModel {
-  creditCardId?: string;
-  creditCardName?: string;
+  creditCard?: {
+    id: string;
+    name: string;
+    brand: string;
+    last4Digits: string;
+  }
   january: number;
   february: number;
   march: number;

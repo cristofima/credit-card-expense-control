@@ -12,6 +12,8 @@ export interface ReportTransactionModel {
   creditCard: {
     id: string;
     name: string;
+    last4Digits: string;
+    brand: string;
   }
   date: Date;
   description: string;

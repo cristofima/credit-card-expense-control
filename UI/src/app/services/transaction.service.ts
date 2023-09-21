@@ -25,7 +25,9 @@ export class TransactionService {
         id: transaction.id,
         creditCard: {
           id: creditCard!.id,
-          name: creditCard!.name
+          name: creditCard!.name,
+          brand: creditCard!.brand,
+          last4Digits: creditCard!.last4Digits
         },
         date: transaction.date,
         description: transaction.description,

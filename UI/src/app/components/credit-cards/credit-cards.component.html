@@ -8,25 +8,30 @@
     <ng-template pTemplate="caption">Tarjetas de Crédito</ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon></th>
-        <th pSortableColumn="brand">Marca <p-sortIcon field="brand"></p-sortIcon></th>
-        <th pSortableColumn="last4Digits">Últimos 4 dígitos <p-sortIcon field="last4Digits"></p-sortIcon></th>
-        <th pSortableColumn="cutOffDate">Día de corte <p-sortIcon field="cutOffDate"></p-sortIcon></th>
-        <th pSortableColumn="expirationDate">Fecha de caducidad <p-sortIcon field="expirationDate"></p-sortIcon></th>
+        <th pSortableColumn="name">Nombre <p-sortIcon field="name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="brand">Marca <p-sortIcon field="brand"></p-sortIcon>
+        </th>
+        <th pSortableColumn="last4Digits">Últimos 4 dígitos <p-sortIcon field="last4Digits"></p-sortIcon>
+        </th>
+        <th pSortableColumn="cutOffDate">Día de corte <p-sortIcon field="cutOffDate"></p-sortIcon>
+        </th>
+        <th pSortableColumn="expirationDate">Fecha de caducidad <p-sortIcon field="expirationDate"></p-sortIcon>
+        </th>
         <th></th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-card>
       <tr>
         <td>{{card.name}}</td>
-        <td>{{card.brand}}</td>
+        <td><img src="assets/icons/{{card.brand}}.png" /></td>
         <td style="text-align: right;">{{card.last4Digits}}</td>
         <td style="text-align: right;">{{card.cutOffDate}}</td>
         <td>{{card.expirationMonth}} / {{card.expirationYear}}</td>
         <td>
           <div class="flex flex-wrap gap-3 justify-content-center">
-            <p-button (onClick)="showDialog(card)" icon="pi pi-pencil" styleClass="p-button-success"
-              title="Editar"></p-button>
+            <p-button (onClick)="showDialog(card)" icon="pi pi-pencil" styleClass="p-button-success" title="Editar">
+            </p-button>
           </div>
         </td>
       </tr>
@@ -42,7 +47,16 @@
         <label for="name">Nombre</label>
         <input pInputText id="name" formControlName="name" />
         <label for="brand">Marca</label>
-        <input pInputText id="brand" formControlName="brand" />
+        <p-dropdown [options]="creditCardBrandOptions" formControlName="brand" placeholder="Seleccionar" inputId="brand"
+          appendTo="body">
+          <ng-template let-brand pTemplate="selectedItem">
+            <img src="assets/icons/{{brand.label}}.png" />
+          </ng-template>
+          <ng-template let-brand pTemplate="item">
+            <img src="assets/icons/{{brand.label}}.png" />
+          </ng-template>
+        </p-dropdown>
+
         <label for="last4Digits">Últimos 4 dígitos</label>
         <input pInputText id="last4Digits" [pKeyFilter]="nonNegativeNumbers" formControlName="last4Digits"
           [maxlength]="4" />

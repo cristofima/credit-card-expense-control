@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Guid } from 'js-guid';
-import { MessageService } from 'primeng/api';
+import { MessageService, SelectItem } from 'primeng/api';
 import { CreditCardModel } from 'src/app/models/credit-card.model';
 import { CreditCardService } from 'src/app/services/credit-card.service';
 
@@ -21,9 +21,11 @@ export class CreditCardsComponent implements OnInit {
   nonNegativeNumbers: RegExp = /\d+/;
 
   formGroup!: FormGroup;
+  creditCardBrandOptions: SelectItem[] = [];
 
   ngOnInit(): void {
     this.creditCards = this.creditCardService.getCreditCards();
+    this.buildCreditCardBrandOptions();
 
     this.formGroup = this.formBuilder.group({
       name: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(25)])),
@@ -32,6 +34,16 @@ export class CreditCardsComponent implements OnInit {
       expirationYear: new FormControl('', Validators.compose([Validators.required])),
       last4Digits: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])),
       cutOffDate: new FormControl('', Validators.compose([Validators.required]))
+    });
+  }
+
+  private buildCreditCardBrandOptions() {
+    const brands = ["Visa", "Mastercard", "Diners Club", "Discover"];
+    brands.forEach(b => {
+      this.creditCardBrandOptions.push({
+        value: b,
+        label: b
+      });
     });
   }
 

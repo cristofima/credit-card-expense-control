@@ -19,8 +19,12 @@ export class ReportService {
 
     creditCards.forEach(creditCard => {
       let rm: ReportModel = {
-        creditCardId: creditCard.id,
-        creditCardName: creditCard.name,
+        creditCard: {
+          id: creditCard.id,
+          name: creditCard.name,
+          brand: creditCard.brand,
+          last4Digits: creditCard.last4Digits
+        },
         january: 0,
         february: 0,
         march: 0,

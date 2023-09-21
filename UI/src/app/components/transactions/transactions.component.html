@@ -11,12 +11,18 @@
     <ng-template pTemplate="caption">Transacciones</ng-template>
     <ng-template pTemplate="header">
       <tr>
-        <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon></th>
-        <th pSortableColumn="creditCard.name">Tarjeta <p-sortIcon field="creditCard.name"></p-sortIcon></th>
-        <th pSortableColumn="date">Fecha de Compra <p-sortIcon field="date"></p-sortIcon></th>
-        <th pSortableColumn="amount">Monto Total <p-sortIcon field="amount"></p-sortIcon></th>
-        <th pSortableColumn="quotas"># Cuotas <p-sortIcon field="quotas"></p-sortIcon></th>
-        <th pSortableColumn="aproxMonthlyQuota">Cuota mensual <p-sortIcon field="aproxMonthlyQuota"></p-sortIcon></th>
+        <th pSortableColumn="description">Descripción <p-sortIcon field="description"></p-sortIcon>
+        </th>
+        <th pSortableColumn="creditCard.id">Tarjeta <p-sortIcon field="creditCard.id"></p-sortIcon>
+        </th>
+        <th pSortableColumn="date">Fecha de Compra <p-sortIcon field="date"></p-sortIcon>
+        </th>
+        <th pSortableColumn="amount">Monto Total <p-sortIcon field="amount"></p-sortIcon>
+        </th>
+        <th pSortableColumn="quotas"># Cuotas <p-sortIcon field="quotas"></p-sortIcon>
+        </th>
+        <th pSortableColumn="aproxMonthlyQuota">Cuota mensual <p-sortIcon field="aproxMonthlyQuota"></p-sortIcon>
+        </th>
         <th></th>
       </tr>
       <tr>
@@ -24,10 +30,22 @@
           <p-columnFilter type="text" field="description"></p-columnFilter>
         </th>
         <th>
-          <p-columnFilter field="creditCard.name" matchMode="equals" [showMenu]="false">
+          <p-columnFilter field="creditCard.id" matchMode="equals" [showMenu]="false">
             <ng-template pTemplate="filter" let-value let-filter="filterCallback">
               <p-dropdown [ngModel]="value" [options]="creditCards" (onChange)="filter($event.value)"
-                placeholder="Seleccionar" [filter]="true" [showClear]="true" optionValue="name" optionLabel="name">
+                placeholder="Seleccionar" [filter]="true" [showClear]="true" optionValue="id">
+                <ng-template let-card pTemplate="selectedItem">
+                  <div class="flex align-items-center gap-2">
+                    <div> {{card.name}} ({{card.last4Digits}})</div>
+                    <img src="assets/icons/{{card.brand}}.png" />
+                  </div>
+                </ng-template>
+                <ng-template let-card pTemplate="item">
+                  <div class="flex align-items-center gap-2">
+                    <div> {{card.name}} ({{card.last4Digits}})</div>
+                    <img src="assets/icons/{{card.brand}}.png" />
+                  </div>
+                </ng-template>
               </p-dropdown>
             </ng-template>
           </p-columnFilter>
@@ -50,7 +68,12 @@
     <ng-template pTemplate="body" let-transaction>
       <tr>
         <td>{{transaction.description}}</td>
-        <td>{{transaction.creditCard.name}}</td>
+        <td>
+          <div class="flex align-items-center gap-2">
+            <div> {{transaction.creditCard.name}} ({{transaction.creditCard.last4Digits}})</div>
+            <img src="assets/icons/{{transaction.creditCard.brand}}.png" />
+          </div>
+        </td>
         <td>{{transaction.date | date}}</td>
         <td style="text-align: right;">{{transaction.amount | currency}}</td>
         <td style="text-align: right;">{{transaction.quotas}}</td>
@@ -82,7 +105,21 @@
         <input pInputText id="description" formControlName="description" />
         <label for="creditCardId">Tarjeta</label>
         <p-dropdown [options]="creditCards" formControlName="creditCardId" placeholder="Seleccionar"
-          inputId="creditCardId" [filter]="true" optionValue="id" optionLabel="name" appendTo="body"></p-dropdown>
+          inputId="creditCardId" [filter]="true" appendTo="body" optionValue="id">
+          <ng-template let-card pTemplate="selectedItem">
+            <div class="flex align-items-center gap-2">
+              <div> {{card.name}} ({{card.last4Digits}})</div>
+              <img src="assets/icons/{{card.brand}}.png" />
+            </div>
+          </ng-template>
+          <ng-template let-card pTemplate="item">
+            <div class="flex align-items-center gap-2">
+              <div> {{card.name}} ({{card.last4Digits}})</div>
+              <img src="assets/icons/{{card.brand}}.png" />
+            </div>
+          </ng-template>
+        </p-dropdown>
+
         <label for="date">Fecha de Compra</label>
         <p-calendar inputId="date" formControlName="date" appendTo="body" [showIcon]="true" [readonlyInput]="true"
           [showButtonBar]="true"></p-calendar>
