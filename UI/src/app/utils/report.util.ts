@@ -19,7 +19,7 @@ export class ReportUtil {
         }
       } else {
         let firstPaymentDate = new Date(firstPaymentYear, firstPaymentMonth - 1, 1);
-        let lastPaymentDate = moment(firstPaymentDate).add(transaction.quotas, 'month').toDate();
+        let lastPaymentDate = moment(firstPaymentDate).add(transaction.quotas - 1, 'month').toDate();
         let currentDate = new Date(year, month - 1, 1);
 
         if (currentDate >= firstPaymentDate && currentDate <= lastPaymentDate) {
