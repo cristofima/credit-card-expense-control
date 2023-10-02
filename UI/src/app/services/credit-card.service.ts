@@ -1,32 +1,29 @@
 import { Injectable } from '@angular/core';
 import { CreditCardModel } from '../models/credit-card.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CreditCardService {
 
-  private storageKey = 'credit-cards';
+  constructor(private http: HttpClient) { }
+
+  private baseApiUrl = 'http://localhost:5021/api';
 
   getCreditCards() {
-    const creditCards = localStorage.getItem(this.storageKey);
-    return creditCards ? JSON.parse(creditCards) as CreditCardModel[] : [];
+    return this.http.get<CreditCardModel[]>(`${this.baseApiUrl}/CreditCards`);
   }
 
   saveCreditCard(creditCard: CreditCardModel) {
-    const creditCards = this.getCreditCards();
-    let cd = creditCards.find(x => x.id == creditCard.id);
-    if (cd) {
-      cd.name = creditCard.name;
-      cd.brand = creditCard.brand;
-      cd.expirationMonth = creditCard.expirationMonth;
-      cd.expirationYear = creditCard.expirationYear;
-      cd.last4Digits = creditCard.last4Digits;
-      cd.cutOffDate = creditCard.cutOffDate;
-    } else {
-      creditCards.push(creditCard);
+    if (creditCard.id) {
+      return this.http.put(`${this.baseApiUrl}/CreditCards/${creditCard.id}`, creditCard);
     }
 
-    localStorage.setItem(this.storageKey, JSON.stringify(creditCards));
+    return this.http.post(`${this.baseApiUrl}/CreditCards`, creditCard);
+  }
+
+  deleteCreditCard(id: string) {
+    return this.http.delete(`${this.baseApiUrl}/CreditCards/${id}`);
   }
 }

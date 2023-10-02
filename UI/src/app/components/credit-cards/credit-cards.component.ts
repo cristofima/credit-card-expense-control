@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Guid } from 'js-guid';
 import { MessageService, SelectItem } from 'primeng/api';
 import { CreditCardModel } from 'src/app/models/credit-card.model';
 import { CreditCardService } from 'src/app/services/credit-card.service';
@@ -24,7 +23,6 @@ export class CreditCardsComponent implements OnInit {
   creditCardBrandOptions: SelectItem[] = [];
 
   ngOnInit(): void {
-    this.creditCards = this.creditCardService.getCreditCards();
     this.buildCreditCardBrandOptions();
 
     this.formGroup = this.formBuilder.group({
@@ -33,7 +31,15 @@ export class CreditCardsComponent implements OnInit {
       expirationMonth: new FormControl('', Validators.compose([Validators.required])),
       expirationYear: new FormControl('', Validators.compose([Validators.required])),
       last4Digits: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])),
-      cutOffDate: new FormControl('', Validators.compose([Validators.required]))
+      cutOffDay: new FormControl('', Validators.compose([Validators.required]))
+    });
+
+    this.initCreditCards();
+  }
+
+  private initCreditCards() {
+    this.creditCardService.getCreditCards().subscribe(creditCards => {
+      this.creditCards = creditCards;
     });
   }
 
@@ -60,7 +66,7 @@ export class CreditCardsComponent implements OnInit {
     this.formGroup.setValue({
       name: creditCard.name,
       brand: creditCard.brand,
-      cutOffDate: creditCard.cutOffDate,
+      cutOffDay: creditCard.cutOffDay,
       expirationMonth: creditCard.expirationMonth,
       expirationYear: creditCard.expirationYear,
       last4Digits: creditCard.last4Digits
@@ -70,17 +76,21 @@ export class CreditCardsComponent implements OnInit {
   saveCreditCard() {
     this.visible = false;
     let creditCard: CreditCardModel = {
-      id: this.isEdit ? this.selectedCreditCard!.id : Guid.newGuid().toString(),
       name: this.formGroup.controls['name'].value,
       brand: this.formGroup.controls['brand'].value,
-      cutOffDate: this.formGroup.controls['cutOffDate'].value,
+      cutOffDay: this.formGroup.controls['cutOffDay'].value,
       expirationMonth: this.formGroup.controls['expirationMonth'].value,
       expirationYear: this.formGroup.controls['expirationYear'].value,
       last4Digits: this.formGroup.controls['last4Digits'].value
     };
 
-    this.creditCardService.saveCreditCard(creditCard);
-    this.messageService.add({ severity: 'success', summary: 'Confirmación', detail: `Tarjeta ${creditCard.name} ${this.isEdit ? 'actualizada' : 'agregada'}` });
-    this.creditCards = this.creditCardService.getCreditCards();
+    if (this.isEdit) {
+      creditCard.id = this.selectedCreditCard!.id;
+    }
+
+    this.creditCardService.saveCreditCard(creditCard).subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Confirmación', detail: `Tarjeta ${creditCard.name} ${this.isEdit ? 'actualizada' : 'agregada'}` });
+      this.initCreditCards();
+    });
   }
 }

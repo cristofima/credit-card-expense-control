@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ReportTransactionModel, TransactionModel } from '../models/transaction.model';
+import { HttpClient } from '@angular/common/http';
+import { lastValueFrom } from 'rxjs';
 import { CreditCardService } from './credit-card.service';
 
 @Injectable({
@@ -7,24 +9,24 @@ import { CreditCardService } from './credit-card.service';
 })
 export class TransactionService {
 
-  constructor(private creditCardService: CreditCardService) { }
+  constructor(private http: HttpClient, private creditCardService: CreditCardService) { }
 
-  private storageKey = 'transactions';
-  private creditCards = this.creditCardService.getCreditCards();
+  private baseApiUrl = 'http://localhost:5021/api';
+
 
   getTransactions() {
-    let transactionsFromLS = localStorage.getItem(this.storageKey);
-    return transactionsFromLS ? JSON.parse(transactionsFromLS) as TransactionModel[] : [];
+    return this.http.get<TransactionModel[]>(`${this.baseApiUrl}/Transactions`);
   }
 
-  getReportTransactions() {
-    let transactions = this.getTransactions();
+  async getReportTransactions() {
+    let creditCards = await lastValueFrom(this.creditCardService.getCreditCards());
+    let transactions = await lastValueFrom(this.getTransactions());
     return transactions.map(transaction => {
-      const creditCard = this.creditCards.find(x => x.id == transaction.creditCardId);
+      const creditCard = creditCards.find(x => x.id == transaction.creditCardId);
       const rt: ReportTransactionModel = {
         id: transaction.id,
         creditCard: {
-          id: creditCard!.id,
+          id: creditCard!.id as string,
           name: creditCard!.name,
           brand: creditCard!.brand,
           last4Digits: creditCard!.last4Digits
@@ -41,27 +43,14 @@ export class TransactionService {
   }
 
   saveTransaction(transaction: TransactionModel) {
-    const transactions = this.getTransactions();
-    let t = transactions.find(x => x.id == transaction.id);
-    if (t) {
-      t.creditCardId = transaction.creditCardId;
-      t.date = transaction.date;
-      t.description = transaction.description;
-      t.amount = transaction.amount;
-      t.quotas = transaction.quotas;
-    } else {
-      transactions.push(transaction);
+    if (transaction.id) {
+      return this.http.put(`${this.baseApiUrl}/Transactions/${transaction.id}`, transaction);
     }
 
-    localStorage.setItem(this.storageKey, JSON.stringify(transactions));
+    return this.http.post(`${this.baseApiUrl}/Transactions`, transaction);
   }
 
   deleteTransaction(id: string) {
-    const transactions = this.getTransactions();
-    let index = transactions.findIndex(x => x.id == id);
-    if (index >= 0) {
-      transactions.splice(index, 1);
-      localStorage.setItem(this.storageKey, JSON.stringify(transactions));
-    }
+    return this.http.delete(`${this.baseApiUrl}/Transactions/${id}`);
   }
 }

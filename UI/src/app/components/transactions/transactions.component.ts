@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Guid } from 'js-guid';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CreditCardModel } from 'src/app/models/credit-card.model';
 import { ReportTransactionModel, TransactionModel } from 'src/app/models/transaction.model';
@@ -26,8 +25,10 @@ export class TransactionsComponent implements OnInit {
   formGroup!: FormGroup;
 
   ngOnInit(): void {
-    this.creditCards = this.creditCardService.getCreditCards();
-    this.transactions = this.transactionService.getReportTransactions();
+    this.creditCardService.getCreditCards().subscribe(creditCards => {
+      this.creditCards = creditCards;
+    });
+
 
     this.formGroup = this.formBuilder.group({
       description: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(25)])),
@@ -36,6 +37,12 @@ export class TransactionsComponent implements OnInit {
       amount: new FormControl('', Validators.compose([Validators.required])),
       quotas: new FormControl('', Validators.compose([Validators.required]))
     });
+
+    this.initTransactions();
+  }
+
+  private async initTransactions() {
+    this.transactions = await this.transactionService.getReportTransactions();
   }
 
   showDialog(transaction?: ReportTransactionModel) {
@@ -60,7 +67,6 @@ export class TransactionsComponent implements OnInit {
   saveTransaction() {
     this.visible = false;
     let transaction: TransactionModel = {
-      id: this.isEdit ? this.selectedTransaction!.id : Guid.newGuid().toString(),
       creditCardId: this.formGroup.controls['creditCardId'].value,
       date: this.formGroup.controls['date'].value,
       description: this.formGroup.controls['description'].value,
@@ -68,10 +74,14 @@ export class TransactionsComponent implements OnInit {
       quotas: this.formGroup.controls['quotas'].value
     };
 
-    this.transactionService.saveTransaction(transaction);
-    this.transactions = this.transactionService.getReportTransactions();
+    if (this.isEdit) {
+      transaction.id = this.selectedTransaction!.id;
+    }
 
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Transaction saved successfully' });
+    this.transactionService.saveTransaction(transaction).subscribe(() => {
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Transaction saved successfully' });
+      this.initTransactions();
+    });
   }
 
   deleteTransaction(transaction: ReportTransactionModel) {
@@ -80,9 +90,10 @@ export class TransactionsComponent implements OnInit {
       header: 'Confirmación',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.transactionService.deleteTransaction(transaction.id);
-        this.transactions = this.transactions.filter(x => x.id != transaction.id);
-        this.messageService.add({ severity: 'success', summary: 'Confirmación', detail: `Transacción eliminada` });
+        this.transactionService.deleteTransaction(transaction.id as string).subscribe(() => {
+          this.transactions = this.transactions.filter(x => x.id != transaction.id);
+          this.messageService.add({ severity: 'success', summary: 'Confirmación', detail: `Transacción eliminada` });
+        });
       }
     });
   }

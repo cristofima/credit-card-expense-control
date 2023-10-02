@@ -4,6 +4,8 @@ import { TransactionService } from './transaction.service';
 import { ReportUtil } from '../utils/report.util';
 import { ReportModel } from '../models/report.model';
 import { CreditCardModel } from '../models/credit-card.model';
+import { firstValueFrom } from 'rxjs';
+import { ReportTransactionModel } from '../models/transaction.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,15 +14,18 @@ export class ReportService {
 
   constructor(private creditCardService: CreditCardService, private transactionService: TransactionService) { }
 
-  getTransactionsReportByYear(year: number) {
+  private transactions: ReportTransactionModel[] = [];
+
+  async getTransactionsReportByYear(year: number) {
     let report: ReportModel[] = [];
-    let creditCards = this.creditCardService.getCreditCards();
+    let creditCards = await firstValueFrom(this.creditCardService.getCreditCards());
+    this.transactions = await this.transactionService.getReportTransactions();
     const months = Array.from({ length: 12 }, (_, index) => index + 1);
 
     creditCards.forEach(creditCard => {
       let rm: ReportModel = {
         creditCard: {
-          id: creditCard.id,
+          id: creditCard.id as string,
           name: creditCard.name,
           brand: creditCard.brand,
           last4Digits: creditCard.last4Digits
@@ -63,9 +68,8 @@ export class ReportService {
   }
 
   getReportTransactions(creditCard: CreditCardModel, month: number, year: number) {
-    let transactions = this.transactionService.getReportTransactions();
-    const ts = transactions.filter(transaction => transaction.creditCard.id == creditCard.id);
-    return ReportUtil.getTransacctionsToBePaid(ts, creditCard.cutOffDate, month, year);
+    const ts = this.transactions.filter(transaction => transaction.creditCard.id == creditCard.id);
+    return ReportUtil.getTransacctionsToBePaid(ts, creditCard.cutOffDay, month, year);
   }
 
 }

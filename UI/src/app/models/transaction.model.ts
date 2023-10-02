@@ -1,5 +1,5 @@
 export interface TransactionModel {
-  id: string;
+  id?: string;
   creditCardId: string;
   date: Date;
   description: string;
@@ -8,7 +8,7 @@ export interface TransactionModel {
 }
 
 export interface ReportTransactionModel {
-  id: string;
+  id?: string;
   creditCard: {
     id: string;
     name: string;

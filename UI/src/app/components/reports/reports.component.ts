@@ -34,8 +34,10 @@ export class ReportsComponent implements OnInit {
     this.buildYearOptions();
     this.buildMonthOptions();
 
-    this.creditCards = this.creditCardService.getCreditCards();
-    this.onChangeYear();
+    this.creditCardService.getCreditCards().subscribe(creditCards => {
+      this.creditCards = creditCards;
+      this.onChangeYear();
+    });
   }
 
   private buildYearOptions() {
@@ -52,8 +54,8 @@ export class ReportsComponent implements OnInit {
     });
   }
 
-  onChangeYear() {
-    this.report = this.reportService.getTransactionsReportByYear(this.year);
+  async onChangeYear() {
+    this.report = await this.reportService.getTransactionsReportByYear(this.year);
     this.calculateTotalByMonth();
     this.onChangeMonth();
   }

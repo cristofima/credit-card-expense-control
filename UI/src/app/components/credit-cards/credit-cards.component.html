@@ -14,7 +14,7 @@
         </th>
         <th pSortableColumn="last4Digits">Últimos 4 dígitos <p-sortIcon field="last4Digits"></p-sortIcon>
         </th>
-        <th pSortableColumn="cutOffDate">Día de corte <p-sortIcon field="cutOffDate"></p-sortIcon>
+        <th pSortableColumn="cutOffDay">Día de corte <p-sortIcon field="cutOffDay"></p-sortIcon>
         </th>
         <th pSortableColumn="expirationDate">Fecha de caducidad <p-sortIcon field="expirationDate"></p-sortIcon>
         </th>
@@ -26,7 +26,7 @@
         <td>{{card.name}}</td>
         <td><img src="assets/icons/{{card.brand}}.png" /></td>
         <td style="text-align: right;">{{card.last4Digits}}</td>
-        <td style="text-align: right;">{{card.cutOffDate}}</td>
+        <td style="text-align: right;">{{card.cutOffDay}}</td>
         <td>{{card.expirationMonth}} / {{card.expirationYear}}</td>
         <td>
           <div class="flex flex-wrap gap-3 justify-content-center">
@@ -60,8 +60,8 @@
         <label for="last4Digits">Últimos 4 dígitos</label>
         <input pInputText id="last4Digits" [pKeyFilter]="nonNegativeNumbers" formControlName="last4Digits"
           [maxlength]="4" />
-        <label for="cutOffDate">Día de corte</label>
-        <p-inputNumber inputId="cutOffDate" formControlName="cutOffDate" [min]="1" [max]="31"> </p-inputNumber>
+        <label for="cutOffDay">Día de corte</label>
+        <p-inputNumber inputId="cutOffDay" formControlName="cutOffDay" [min]="1" [max]="31"> </p-inputNumber>
         <label for="expirationMonth">Mes de expiración</label>
         <p-inputNumber inputId="expirationMonth" formControlName="expirationMonth" [min]="1" [max]="12">
         </p-inputNumber>
