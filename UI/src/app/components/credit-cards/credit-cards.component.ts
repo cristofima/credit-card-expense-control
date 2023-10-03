@@ -16,6 +16,7 @@ export class CreditCardsComponent implements OnInit {
   creditCards: CreditCardModel[] = [];
   visible = false;
   isEdit = false;
+  loading = false;
   private selectedCreditCard?: CreditCardModel;
   nonNegativeNumbers: RegExp = /\d+/;
 
@@ -38,7 +39,9 @@ export class CreditCardsComponent implements OnInit {
   }
 
   private initCreditCards() {
+    this.loading = true;
     this.creditCardService.getCreditCards().subscribe(creditCards => {
+      this.loading = false;
       this.creditCards = creditCards;
     });
   }

@@ -6,7 +6,7 @@
 
 <div class="card">
   <p-table [value]="transactions" [tableStyle]="{'min-width': '60rem'}" [paginator]="true" [rows]="10"
-    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]"
+    [showCurrentPageReport]="true" [rowsPerPageOptions]="[10, 25, 50]" [loading]="loading"
     currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries">
     <ng-template pTemplate="caption">Transacciones</ng-template>
     <ng-template pTemplate="header">

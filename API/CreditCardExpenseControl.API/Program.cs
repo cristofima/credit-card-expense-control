@@ -1,4 +1,5 @@
 using CreditCardExpenseControl.API.DbContexts;
+using CreditCardExpenseControl.API.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 var defaultConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<CreditCardExpenseControlContext>(options =>
    options.UseSqlServer(defaultConnectionString));
+
+builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

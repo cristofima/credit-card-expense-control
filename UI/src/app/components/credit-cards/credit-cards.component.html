@@ -4,7 +4,7 @@
 <br />
 
 <div class="card">
-  <p-table [value]="creditCards" [tableStyle]="{'min-width': '60rem'}">
+  <p-table [value]="creditCards" [tableStyle]="{'min-width': '60rem'}" [loading]="loading">
     <ng-template pTemplate="caption">Tarjetas de Crédito</ng-template>
     <ng-template pTemplate="header">
       <tr>
@@ -34,6 +34,11 @@
             </p-button>
           </div>
         </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" style="text-align: center;">No hay registros</td>
       </tr>
     </ng-template>
   </p-table>

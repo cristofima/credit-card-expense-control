@@ -5,7 +5,7 @@
 
   <br />
 
-  <p-table [value]="report" [tableStyle]="{'min-width': '70rem'}">
+  <p-table [value]="report" [tableStyle]="{'min-width': '70rem'}" [loading]="yearLoading">
     <ng-template pTemplate="caption">Año {{year}}</ng-template>
     <ng-template pTemplate="header">
       <tr>
@@ -47,7 +47,7 @@
       </tr>
     </ng-template>
     <ng-template pTemplate="footer">
-      <tr>
+      <tr *ngIf="summary">
         <td>TOTAL</td>
         <td>{{summary.january | currency}}</td>
         <td>{{summary.february | currency}}</td>

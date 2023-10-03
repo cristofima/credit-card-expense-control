@@ -20,6 +20,7 @@ export class TransactionsComponent implements OnInit {
   transactions: ReportTransactionModel[] = [];
   visible = false;
   isEdit = false;
+  loading = false;
   private selectedTransaction?: ReportTransactionModel;
 
   formGroup!: FormGroup;
@@ -42,7 +43,9 @@ export class TransactionsComponent implements OnInit {
   }
 
   private async initTransactions() {
+    this.loading = true;
     this.transactions = await this.transactionService.getReportTransactions();
+    this.loading = false;
   }
 
   showDialog(transaction?: ReportTransactionModel) {
