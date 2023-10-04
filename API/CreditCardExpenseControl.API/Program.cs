@@ -10,6 +10,7 @@ var defaultConnectionString = builder.Configuration.GetConnectionString("Default
 builder.Services.AddDbContext<CreditCardExpenseControlContext>(options =>
    options.UseSqlServer(defaultConnectionString));
 
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IReportService, ReportService>();
 
 builder.Services.AddControllers();

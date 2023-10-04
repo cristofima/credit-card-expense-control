@@ -16,9 +16,15 @@ namespace CreditCardExpenseControl.API.Controllers
         }
 
         [HttpGet("{year}")]
-        public ActionResult<IEnumerable<ReportModel>> GetTransactionsReportByYear(int year)
+        public ActionResult<IEnumerable<ReportModel>> GetReportByYear(int year)
         {
-            return _IReportService.GetTransactionsReportByYear(year);
+            return _IReportService.GetReportByYear(year);
+        }
+
+        [HttpGet("{year}/{month}")]
+        public ActionResult<IEnumerable<ReportTransactionModel>> GetReportTransactionsByYearAndMonth(int year, int month)
+        {
+            return _IReportService.GetReportTransactionsByYearAndMonth(year, month);
         }
     }
 }

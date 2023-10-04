@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { lastValueFrom } from 'rxjs';
-import { CreditCardModel } from 'src/app/models/credit-card.model';
 import { ReportModel } from 'src/app/models/report.model';
 import { ReportTransactionModel } from 'src/app/models/transaction.model';
-import { CreditCardService } from 'src/app/services/credit-card.service';
 import { ReportService } from 'src/app/services/report.service';
-import { TransactionService } from 'src/app/services/transaction.service';
 
 @Component({
   selector: 'app-reports',
@@ -15,13 +12,11 @@ import { TransactionService } from 'src/app/services/transaction.service';
 })
 export class ReportsComponent implements OnInit {
 
-  constructor(private creditCardService: CreditCardService, private reportService: ReportService, private transactionService: TransactionService) { }
+  constructor(private reportService: ReportService) { }
 
   transactionsReport: ReportTransactionModel[] = [];
-  private transactions: ReportTransactionModel[] = [];
   report: ReportModel[] = [];
   summary!: ReportModel;
-  private creditCards!: CreditCardModel[];
 
   year!: number;
   month!: number;
@@ -31,6 +26,7 @@ export class ReportsComponent implements OnInit {
   monthOptions: SelectItem[] = [];
 
   yearLoading = false;
+  monthLoading = false;
 
   ngOnInit(): void {
     let today = new Date();
@@ -41,10 +37,7 @@ export class ReportsComponent implements OnInit {
 
     this.yearLoading = true;
 
-    this.creditCardService.getCreditCards().subscribe(creditCards => {
-      this.creditCards = creditCards;
-      this.onChangeYear();
-    });
+    this.onChangeYear();
   }
 
   private buildYearOptions() {
@@ -63,20 +56,17 @@ export class ReportsComponent implements OnInit {
 
   async onChangeYear() {
     this.yearLoading = true;
-    this.report = await lastValueFrom(this.reportService.getTransactionsReportByYear(this.year));
+    this.report = await lastValueFrom(this.reportService.getReportByYear(this.year));
     this.calculateTotalByMonth();
     this.yearLoading = false;
-    this.transactions = await this.transactionService.getReportTransactions();
     this.onChangeMonth();
   }
 
-  onChangeMonth() {
+  async onChangeMonth() {
+    this.monthLoading = true;
     this.stringMonth = new Date(this.year, this.month - 1).toLocaleString('es-EC', { month: 'long' });
-    this.transactionsReport = [];
-    this.creditCards.forEach(async (creditCard) => {
-      let arr = await this.reportService.getReportTransactions(this.transactions, creditCard, this.month, this.year);
-      this.transactionsReport = this.transactionsReport.concat(arr);
-    });
+    this.transactionsReport = await lastValueFrom(this.reportService.getReportTransactionsByYearAndMonth(this.year, this.month));
+    this.monthLoading = false;
   }
 
   caculateTotalByCreditCard(creditCardId: string) {

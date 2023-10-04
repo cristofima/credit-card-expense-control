@@ -72,7 +72,7 @@
   <br />
 
   <p-table [value]="transactionsReport" sortField="creditCard.name" sortMode="single" dataKey="creditCard.id"
-    rowGroupMode="subheader" groupRowsBy="creditCard.id" [tableStyle]="{'min-width': '70rem'}">
+    rowGroupMode="subheader" groupRowsBy="creditCard.id" [tableStyle]="{'min-width': '70rem'}" [loading]="monthLoading">
     <ng-template pTemplate="caption">Mes {{stringMonth}}</ng-template>
     <ng-template pTemplate="header">
       <tr>

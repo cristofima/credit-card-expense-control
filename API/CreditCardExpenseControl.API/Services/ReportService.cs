@@ -3,37 +3,25 @@ using CreditCardExpenseControl.API.Entities;
 using CreditCardExpenseControl.API.Models;
 using CreditCardExpenseControl.API.Utils;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace CreditCardExpenseControl.API.Services
 {
     public class ReportService : IReportService
     {
         private readonly CreditCardExpenseControlContext _context;
+        private readonly IMemoryCache _memoryCache;
 
-        public ReportService(CreditCardExpenseControlContext context)
+        public ReportService(CreditCardExpenseControlContext context, IMemoryCache memoryCache)
         {
             _context = context;
+            _memoryCache = memoryCache;
         }
 
-        public List<ReportModel> GetTransactionsReportByYear(int year)
+        public List<ReportModel> GetReportByYear(int year)
         {
             var creditCards = _context.CreditCards.AsNoTracking().ToList();
-            var transactions = _context.Transactions.Select(t => new ReportTransactionModel
-            {
-                Quotas = t.Quotas,
-                Amount = t.Amount,
-                Date = t.Date,
-                CreditCard = new CreditCardModel
-                {
-                    Brand = t.CreditCard.Brand,
-                    Id = t.CreditCard.Id,
-                    Last4Digits = t.CreditCard.Last4Digits,
-                    Name = t.CreditCard.Name
-                },
-                AproxMonthlyQuota = t.Amount / t.Quotas,
-                Description = t.Description,
-                Id = t.Id
-            }).AsNoTracking().ToList();
+            var reportTransactions = this.GetReportTransactions();
 
             int[] months = Enumerable.Range(1, 12).ToArray();
 
@@ -52,7 +40,7 @@ namespace CreditCardExpenseControl.API.Services
 
                 foreach (var month in months)
                 {
-                    var ts = this.GetReportTransactions(transactions, creditCard, month, year);
+                    var ts = this.GetReportTransactions(reportTransactions, creditCard, month, year);
                     var total = Math.Round(ts.Sum(t => Math.Round(t.Amount / t.Quotas, 2)), 2);
 
                     if (month == 1) rm.January = total;
@@ -78,10 +66,63 @@ namespace CreditCardExpenseControl.API.Services
             var ts = transactions.Where(transaction => transaction.CreditCard.Id.Equals(creditCard.Id)).ToList();
             return ReportUtil.GetTransacctionsToBePaid(ts, creditCard.CutOffDay, month, year);
         }
+
+        public List<ReportTransactionModel> GetReportTransactionsByYearAndMonth(int year, int month)
+        {
+            var creditCards = _context.CreditCards.AsNoTracking().ToList();
+            var reportTransactions = this.GetReportTransactions();
+            var rtByYearAndMonth = new List<ReportTransactionModel>();
+
+            foreach (var creditCard in creditCards)
+            {
+                var ts = this.GetReportTransactions(reportTransactions, creditCard, month, year);
+                rtByYearAndMonth.AddRange(ts);
+            }
+
+            return rtByYearAndMonth;
+        }
+
+        private List<ReportTransactionModel> GetReportTransactions()
+        {
+            if (!_memoryCache.TryGetValue("REPORT_TRANSACTIONS", out List<ReportTransactionModel> reportTransactions))
+            {
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(60))
+                    .SetAbsoluteExpiration(TimeSpan.FromHours(1))
+                    .SetPriority(CacheItemPriority.Normal)
+                    .SetSize(1024);
+
+                reportTransactions = _context.Transactions.Select(t => new ReportTransactionModel
+                {
+                    Quotas = t.Quotas,
+                    Amount = t.Amount,
+                    Date = t.Date,
+                    CreditCard = new CreditCardModel
+                    {
+                        Brand = t.CreditCard.Brand,
+                        Id = t.CreditCard.Id,
+                        Last4Digits = t.CreditCard.Last4Digits,
+                        Name = t.CreditCard.Name
+                    },
+                    AproxMonthlyQuota = Math.Round(t.Amount / t.Quotas, 2),
+                    Description = t.Description,
+                    Id = t.Id
+                }).AsNoTracking().ToList();
+
+                _memoryCache.Set("REPORT_TRANSACTIONS", reportTransactions, cacheEntryOptions);
+            }
+            else
+            {
+                reportTransactions = _memoryCache.Get<List<ReportTransactionModel>>("REPORT_TRANSACTIONS");
+            }
+
+            return reportTransactions;
+        }
     }
 
     public interface IReportService
     {
-        List<ReportModel> GetTransactionsReportByYear(int year);
+        List<ReportModel> GetReportByYear(int year);
+        List<ReportTransactionModel> GetReportTransactionsByYearAndMonth(int year, int month);
     }
 }
