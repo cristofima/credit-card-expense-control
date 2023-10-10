@@ -32,7 +32,8 @@ export class CreditCardsComponent implements OnInit {
       expirationMonth: new FormControl('', Validators.compose([Validators.required])),
       expirationYear: new FormControl('', Validators.compose([Validators.required])),
       last4Digits: new FormControl('', Validators.compose([Validators.required, Validators.minLength(4), Validators.maxLength(4)])),
-      cutOffDay: new FormControl('', Validators.compose([Validators.required]))
+      cutOffDay: new FormControl('', Validators.compose([Validators.required])),
+      deferredContributionPercentage: new FormControl('', Validators.compose([Validators.required, Validators.min(0)]))
     });
 
     this.initCreditCards();
@@ -72,7 +73,8 @@ export class CreditCardsComponent implements OnInit {
       cutOffDay: creditCard.cutOffDay,
       expirationMonth: creditCard.expirationMonth,
       expirationYear: creditCard.expirationYear,
-      last4Digits: creditCard.last4Digits
+      last4Digits: creditCard.last4Digits,
+      deferredContributionPercentage: creditCard.deferredContributionPercentage
     });
   }
 
@@ -84,7 +86,8 @@ export class CreditCardsComponent implements OnInit {
       cutOffDay: this.formGroup.controls['cutOffDay'].value,
       expirationMonth: this.formGroup.controls['expirationMonth'].value,
       expirationYear: this.formGroup.controls['expirationYear'].value,
-      last4Digits: this.formGroup.controls['last4Digits'].value
+      last4Digits: this.formGroup.controls['last4Digits'].value,
+      deferredContributionPercentage: this.formGroup.controls['deferredContributionPercentage'].value
     };
 
     if (this.isEdit) {

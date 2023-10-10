@@ -110,10 +110,11 @@
           {{ transaction.quotas}}
         </td>
         <td style="text-align: right;">
-          {{transaction.amount / transaction.quotas | currency}}
+          {{transaction.aproxMonthlyQuota | currency}}
         </td>
         <td>
-          {{transaction.date | date}}
+          {{transaction.date | date}} <p-badge *ngIf="transaction.graceMonths" value="+{{transaction.graceMonths}}"
+            pTooltip="{{transaction.graceMonths}} meses de gracia"></p-badge>
         </td>
       </tr>
     </ng-template>

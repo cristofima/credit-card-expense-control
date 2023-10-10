@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
 import { ReportModel } from 'src/app/models/report.model';
 import { ReportTransactionModel } from 'src/app/models/transaction.model';
 import { ReportService } from 'src/app/services/report.service';
@@ -73,7 +73,7 @@ export class ReportsComponent implements OnInit {
     let total = 0;
     this.transactionsReport.forEach(transaction => {
       if (transaction.creditCard.id == creditCardId) {
-        total += transaction.amount / transaction.quotas;
+        total += transaction.aproxMonthlyQuota;
       }
     });
 

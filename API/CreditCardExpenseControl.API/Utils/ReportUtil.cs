@@ -4,7 +4,7 @@ namespace CreditCardExpenseControl.API.Utils
 {
     public static class ReportUtil
     {
-        public static List<ReportTransactionModel> GetTransacctionsToBePaid(List<ReportTransactionModel> transactions, int cutOffDay, int month, int year)
+        public static List<ReportTransactionModel> GetTransacctionsToBePaid(List<ReportTransactionModel> transactions, int cutOffDay, double deferredContributionPercentage, int month, int year)
         {
             List<ReportTransactionModel> newTransactions = new List<ReportTransactionModel>();
 
@@ -26,12 +26,29 @@ namespace CreditCardExpenseControl.API.Utils
                 else
                 {
                     DateTime firstPaymentDate = new DateTime(firstPaymentYear, firstPaymentMonth, 1);
+                    if(transaction.GraceMonths > 0)
+                    {
+                        firstPaymentDate = firstPaymentDate.AddMonths(transaction.GraceMonths);
+                        firstPaymentYear = firstPaymentDate.Year;
+                        firstPaymentMonth = firstPaymentDate.Month;
+                    }
+
                     DateTime lastPaymentDate = firstPaymentDate.AddMonths(transaction.Quotas - 1);
                     DateTime currentDate = new DateTime(year, month, 1);
 
                     if (currentDate >= firstPaymentDate && currentDate <= lastPaymentDate)
                     {
-                        newTransactions.Add(transaction);
+                        if(firstPaymentYear == year && firstPaymentMonth == month)
+                        {
+                            var cloneTransaction = transaction.Clone() as ReportTransactionModel;
+                            cloneTransaction.AproxMonthlyQuota = transaction.AproxMonthlyQuota + (transaction.Amount * deferredContributionPercentage / 100);
+
+                            newTransactions.Add(cloneTransaction);
+                        }
+                        else
+                        {
+                            newTransactions.Add(transaction);
+                        }
                     }
                 }
             }

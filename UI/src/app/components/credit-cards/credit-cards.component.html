@@ -72,6 +72,9 @@
         </p-inputNumber>
         <label for="expirationYear">Año de expiración</label>
         <p-inputNumber inputId="expirationYear" formControlName="expirationYear" [min]="2023"> </p-inputNumber>
+        <label for="deferredContributionPercentage">% Contribución a diferidos</label>
+        <p-inputNumber inputId="deferredContributionPercentage" formControlName="deferredContributionPercentage"
+          [min]="0" suffix="%" mode="decimal" [maxFractionDigits]="3"> </p-inputNumber>
       </div>
     </div>
   </form>

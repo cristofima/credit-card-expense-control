@@ -24,6 +24,9 @@ import { CardModule } from 'primeng/card';
 import { TabMenuModule } from 'primeng/tabmenu';
 import { CalendarModule } from 'primeng/calendar';
 import { KeyFilterModule } from 'primeng/keyfilter';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { BadgeModule } from 'primeng/badge';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   declarations: [
@@ -51,7 +54,10 @@ import { KeyFilterModule } from 'primeng/keyfilter';
     CardModule,
     TabMenuModule,
     CalendarModule,
-    KeyFilterModule
+    KeyFilterModule,
+    RadioButtonModule,
+    BadgeModule,
+    TooltipModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

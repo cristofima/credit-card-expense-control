@@ -41,7 +41,7 @@ namespace CreditCardExpenseControl.API.Services
                 foreach (var month in months)
                 {
                     var ts = this.GetReportTransactions(reportTransactions, creditCard, month, year);
-                    var total = Math.Round(ts.Sum(t => Math.Round(t.Amount / t.Quotas, 2)), 2);
+                    var total = Math.Round(ts.Sum(t => Math.Round(t.AproxMonthlyQuota, 2)), 2);
 
                     if (month == 1) rm.January = total;
                     else if (month == 2) rm.February = total;
@@ -64,7 +64,7 @@ namespace CreditCardExpenseControl.API.Services
         public List<ReportTransactionModel> GetReportTransactions(List<ReportTransactionModel> transactions, CreditCard creditCard, int month, int year)
         {
             var ts = transactions.Where(transaction => transaction.CreditCard.Id.Equals(creditCard.Id)).ToList();
-            return ReportUtil.GetTransacctionsToBePaid(ts, creditCard.CutOffDay, month, year);
+            return ReportUtil.GetTransacctionsToBePaid(ts, creditCard.CutOffDay, creditCard.DeferredContributionPercentage, month, year);
         }
 
         public List<ReportTransactionModel> GetReportTransactionsByYearAndMonth(int year, int month)
@@ -96,6 +96,7 @@ namespace CreditCardExpenseControl.API.Services
                 {
                     Quotas = t.Quotas,
                     Amount = t.Amount,
+                    GraceMonths = t.GraceMonths,
                     Date = t.Date,
                     CreditCard = new CreditCardModel
                     {

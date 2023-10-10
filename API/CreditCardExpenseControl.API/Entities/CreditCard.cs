@@ -13,6 +13,7 @@ namespace CreditCardExpenseControl.API.Entities
         public int ExpirationYear { get; set; }
         public string Last4Digits { get; set; }
         public int CutOffDay { get; set; }
+        public double DeferredContributionPercentage { get; set; }
 
         public ICollection<Transaction> Transactions { get; } = new List<Transaction>();
     }

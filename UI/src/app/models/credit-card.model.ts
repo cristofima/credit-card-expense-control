@@ -6,4 +6,5 @@ export interface CreditCardModel {
   expirationYear: number;
   last4Digits: string;
   cutOffDay: number;
+  deferredContributionPercentage: number;
 }

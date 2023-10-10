@@ -21,6 +21,12 @@ export class TransactionsComponent implements OnInit {
   visible = false;
   isEdit = false;
   loading = false;
+
+  transactionTypes: any[] = [
+    { name: 'Corriente', key: 'C' },
+    { name: 'Diferido', key: 'D' }
+  ];
+
   private selectedTransaction?: ReportTransactionModel;
 
   formGroup!: FormGroup;
@@ -30,13 +36,18 @@ export class TransactionsComponent implements OnInit {
       this.creditCards = creditCards;
     });
 
-
     this.formGroup = this.formBuilder.group({
       description: new FormControl('', Validators.compose([Validators.required, Validators.minLength(3), Validators.maxLength(25)])),
       creditCardId: new FormControl('', Validators.compose([Validators.required])),
       date: new FormControl('', Validators.compose([Validators.required])),
       amount: new FormControl('', Validators.compose([Validators.required])),
-      quotas: new FormControl('', Validators.compose([Validators.required]))
+      transactionType: new FormControl('', Validators.compose([Validators.required])),
+      quotas: new FormControl(1, {
+        initialValueIsDefault: true, validators: Validators.compose([Validators.required, Validators.min(1)])
+      }),
+      graceMonths: new FormControl(0, {
+        initialValueIsDefault: true, validators: Validators.compose([Validators.required, Validators.min(0)])
+      })
     });
 
     this.initTransactions();
@@ -55,6 +66,7 @@ export class TransactionsComponent implements OnInit {
 
     if (!transaction) {
       this.formGroup.reset();
+      this.formGroup.controls['transactionType'].setValue(this.transactionTypes[0]);
       return;
     }
 
@@ -63,18 +75,24 @@ export class TransactionsComponent implements OnInit {
       creditCardId: transaction.creditCard.id,
       date: new Date(transaction.date),
       amount: transaction.amount,
-      quotas: transaction.quotas
+      quotas: transaction.quotas,
+      graceMonths: transaction.graceMonths,
+      transactionType: transaction.quotas > 1 ? this.transactionTypes[1] : this.transactionTypes[0]
     });
   }
 
   saveTransaction() {
     this.visible = false;
+
+    let isCurrent = this.formGroup.controls['transactionType'].value.key == 'C';
+
     let transaction: TransactionModel = {
       creditCardId: this.formGroup.controls['creditCardId'].value,
       date: this.formGroup.controls['date'].value,
       description: this.formGroup.controls['description'].value,
       amount: this.formGroup.controls['amount'].value,
-      quotas: this.formGroup.controls['quotas'].value
+      quotas: isCurrent ? 1 : this.formGroup.controls['quotas'].value,
+      graceMonths: isCurrent ? 0 : this.formGroup.controls['graceMonths'].value
     };
 
     if (this.isEdit) {

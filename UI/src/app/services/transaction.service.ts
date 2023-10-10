@@ -35,6 +35,7 @@ export class TransactionService {
         description: transaction.description,
         amount: transaction.amount,
         quotas: transaction.quotas,
+        graceMonths: transaction.graceMonths,
         aproxMonthlyQuota: transaction.amount / transaction.quotas
       };
 

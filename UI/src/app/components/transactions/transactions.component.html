@@ -74,7 +74,8 @@
             <img src="assets/icons/{{transaction.creditCard.brand}}.png" />
           </div>
         </td>
-        <td>{{transaction.date | date}}</td>
+        <td>{{transaction.date | date}} <p-badge *ngIf="transaction.graceMonths" value="+{{transaction.graceMonths}}"
+            pTooltip="{{transaction.graceMonths}} meses de gracia"></p-badge></td>
         <td style="text-align: right;">{{transaction.amount | currency}}</td>
         <td style="text-align: right;">{{transaction.quotas}}</td>
         <td style="text-align: right;">{{transaction.aproxMonthlyQuota | currency}}</td>
@@ -126,8 +127,21 @@
         <label for="amount">Monto Total</label>
         <p-inputNumber inputId="amount" formControlName="amount" [min]="0.01" mode="decimal" [maxFractionDigits]="2">
         </p-inputNumber>
-        <label for="quotas">Número de cuotas</label>
-        <p-inputNumber inputId="quotas" formControlName="quotas" [min]="1"> </p-inputNumber>
+
+        <div class="flex flex-wrap gap-3">
+          <div *ngFor="let type of transactionTypes" class="flex align-items-center">
+            <p-radioButton [inputId]="type.key" [value]="type" formControlName="transactionType"></p-radioButton>
+            <label [for]="type.key" class="ml-2">{{ type.name }}</label>
+          </div>
+        </div>
+
+        <ng-container
+          *ngIf="formGroup.controls['transactionType'].value && formGroup.controls['transactionType'].value.key == 'D'">
+          <label for="quotas">Número de cuotas</label>
+          <p-inputNumber inputId="quotas" formControlName="quotas" [min]="2"> </p-inputNumber>
+          <label for="graceMonths">Meses de gracia</label>
+          <p-inputNumber inputId="graceMonths" formControlName="graceMonths" [min]="0"> </p-inputNumber>
+        </ng-container>
       </div>
     </div>
   </form>

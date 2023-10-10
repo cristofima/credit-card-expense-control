@@ -5,6 +5,7 @@ export interface TransactionModel {
   description: string;
   amount: number;
   quotas: number;
+  graceMonths: number;
 }
 
 export interface ReportTransactionModel {
@@ -19,5 +20,6 @@ export interface ReportTransactionModel {
   description: string;
   amount: number;
   quotas: number;
+  graceMonths: number;
   aproxMonthlyQuota: number;
 }
