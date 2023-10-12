@@ -6,6 +6,8 @@ export interface TransactionModel {
   amount: number;
   quotas: number;
   graceMonths: number;
+  isRecurringPayment: boolean;
+  recurringPaymentEndDate?: Date;
 }
 
 export interface ReportTransactionModel {
@@ -22,4 +24,6 @@ export interface ReportTransactionModel {
   quotas: number;
   graceMonths: number;
   aproxMonthlyQuota: number;
+  isRecurringPayment: boolean;
+  recurringPaymentEndDate?: Date;
 }

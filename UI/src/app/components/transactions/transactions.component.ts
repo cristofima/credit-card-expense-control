@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { lastValueFrom } from 'rxjs';
 import { CreditCardModel } from 'src/app/models/credit-card.model';
 import { ReportTransactionModel, TransactionModel } from 'src/app/models/transaction.model';
 import { CreditCardService } from 'src/app/services/credit-card.service';
@@ -47,7 +48,11 @@ export class TransactionsComponent implements OnInit {
       }),
       graceMonths: new FormControl(0, {
         initialValueIsDefault: true, validators: Validators.compose([Validators.required, Validators.min(0)])
-      })
+      }),
+      isRecurringPayment: new FormControl(false, {
+        initialValueIsDefault: true
+      }),
+      recurringPaymentEndDate: new FormControl(''),
     });
 
     this.initTransactions();
@@ -55,7 +60,7 @@ export class TransactionsComponent implements OnInit {
 
   private async initTransactions() {
     this.loading = true;
-    this.transactions = await this.transactionService.getReportTransactions();
+    this.transactions = await lastValueFrom(this.transactionService.getReportTransactions());
     this.loading = false;
   }
 
@@ -77,7 +82,9 @@ export class TransactionsComponent implements OnInit {
       amount: transaction.amount,
       quotas: transaction.quotas,
       graceMonths: transaction.graceMonths,
-      transactionType: transaction.quotas > 1 ? this.transactionTypes[1] : this.transactionTypes[0]
+      transactionType: transaction.quotas > 1 ? this.transactionTypes[1] : this.transactionTypes[0],
+      isRecurringPayment: transaction.isRecurringPayment,
+      recurringPaymentEndDate: transaction.recurringPaymentEndDate ? new Date(transaction.recurringPaymentEndDate) : null
     });
   }
 
@@ -92,15 +99,20 @@ export class TransactionsComponent implements OnInit {
       description: this.formGroup.controls['description'].value,
       amount: this.formGroup.controls['amount'].value,
       quotas: isCurrent ? 1 : this.formGroup.controls['quotas'].value,
-      graceMonths: isCurrent ? 0 : this.formGroup.controls['graceMonths'].value
+      graceMonths: isCurrent ? 0 : this.formGroup.controls['graceMonths'].value,
+      isRecurringPayment: this.formGroup.controls['isRecurringPayment'].value
     };
+
+    if (transaction.isRecurringPayment) {
+      transaction.recurringPaymentEndDate = this.formGroup.controls['recurringPaymentEndDate'].value;
+    }
 
     if (this.isEdit) {
       transaction.id = this.selectedTransaction!.id;
     }
 
     this.transactionService.saveTransaction(transaction).subscribe(() => {
-      this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Transaction saved successfully' });
+      this.messageService.add({ severity: 'success', summary: 'Success', detail: `Transacción ${this.isEdit ? 'actualizada' : 'agregada'}` });
       this.initTransactions();
     });
   }

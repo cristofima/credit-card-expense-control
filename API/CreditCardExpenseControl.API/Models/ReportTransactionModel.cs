@@ -10,6 +10,8 @@
         public int Quotas { get; set; }
         public int GraceMonths { get; set; }
         public double AproxMonthlyQuota { get; set; }
+        public bool IsRecurringPayment { get; set; }
+        public DateTime? RecurringPaymentEndDate { get; set; }
 
         public object Clone()
         {

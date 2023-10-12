@@ -135,6 +135,19 @@
           </div>
         </div>
 
+        <div class="flex align-items-center gap-1"
+          *ngIf="formGroup.controls['transactionType'].value && formGroup.controls['transactionType'].value.key == 'C'">
+          <p-checkbox formControlName="isRecurringPayment" [binary]="true" inputId="isRecurringPayment"></p-checkbox>
+          <label for="isRecurringPayment">¿Es un pago recurrente?</label>
+        </div>
+
+        <ng-container *ngIf="formGroup.controls['isRecurringPayment'].value">
+          <label for="date">Fecha de Finalización del pago recurrente (Opcional)</label>
+          <p-calendar inputId="recurringPaymentEndDate" formControlName="recurringPaymentEndDate" appendTo="body"
+            view="month" dateFormat="mm/yy" [showIcon]="true" [readonlyInput]="true"
+            [showButtonBar]="true"></p-calendar>
+        </ng-container>
+
         <ng-container
           *ngIf="formGroup.controls['transactionType'].value && formGroup.controls['transactionType'].value.key == 'D'">
           <label for="quotas">Número de cuotas</label>

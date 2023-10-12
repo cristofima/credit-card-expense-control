@@ -10,7 +10,7 @@ namespace CreditCardExpenseControl.API.Utils
 
             foreach (var transaction in transactions)
             {
-                DateTime purchaseDate = transaction.Date;
+                var purchaseDate = transaction.Date;
                 int purchaseDay = purchaseDate.Day;
                 int purchaseMonth = purchaseDate.Month;
                 int purchaseYear = purchaseDate.Year;
@@ -21,11 +21,20 @@ namespace CreditCardExpenseControl.API.Utils
                     if (firstPaymentMonth == month && firstPaymentYear == year)
                     {
                         newTransactions.Add(transaction);
+                    }else if (transaction.IsRecurringPayment)
+                    {
+                        var currentDate = new DateTime(year, month, 1);
+                        var firstPaymentDate = new DateTime(firstPaymentYear, firstPaymentMonth, 1);
+
+                        if (currentDate >= firstPaymentDate && (!transaction.RecurringPaymentEndDate.HasValue || currentDate <= transaction.RecurringPaymentEndDate.Value))
+                        {
+                            newTransactions.Add(transaction);
+                        }
                     }
                 }
                 else
                 {
-                    DateTime firstPaymentDate = new DateTime(firstPaymentYear, firstPaymentMonth, 1);
+                    var firstPaymentDate = new DateTime(firstPaymentYear, firstPaymentMonth, 1);
                     if(transaction.GraceMonths > 0)
                     {
                         firstPaymentDate = firstPaymentDate.AddMonths(transaction.GraceMonths);
@@ -33,8 +42,8 @@ namespace CreditCardExpenseControl.API.Utils
                         firstPaymentMonth = firstPaymentDate.Month;
                     }
 
-                    DateTime lastPaymentDate = firstPaymentDate.AddMonths(transaction.Quotas - 1);
-                    DateTime currentDate = new DateTime(year, month, 1);
+                    var lastPaymentDate = firstPaymentDate.AddMonths(transaction.Quotas - 1);
+                    var currentDate = new DateTime(year, month, 1);
 
                     if (currentDate >= firstPaymentDate && currentDate <= lastPaymentDate)
                     {

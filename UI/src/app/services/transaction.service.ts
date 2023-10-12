@@ -1,15 +1,13 @@
 import { Injectable } from '@angular/core';
 import { ReportTransactionModel, TransactionModel } from '../models/transaction.model';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom } from 'rxjs';
-import { CreditCardService } from './credit-card.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TransactionService {
 
-  constructor(private http: HttpClient, private creditCardService: CreditCardService) { }
+  constructor(private http: HttpClient) { }
 
   private baseApiUrl = 'http://localhost:27972/api';
 
@@ -18,29 +16,8 @@ export class TransactionService {
     return this.http.get<TransactionModel[]>(`${this.baseApiUrl}/Transactions`);
   }
 
-  async getReportTransactions() {
-    let creditCards = await lastValueFrom(this.creditCardService.getCreditCards());
-    let transactions = await lastValueFrom(this.getTransactions());
-    return transactions.map(transaction => {
-      const creditCard = creditCards.find(x => x.id == transaction.creditCardId);
-      const rt: ReportTransactionModel = {
-        id: transaction.id,
-        creditCard: {
-          id: creditCard!.id as string,
-          name: creditCard!.name,
-          brand: creditCard!.brand,
-          last4Digits: creditCard!.last4Digits
-        },
-        date: transaction.date,
-        description: transaction.description,
-        amount: transaction.amount,
-        quotas: transaction.quotas,
-        graceMonths: transaction.graceMonths,
-        aproxMonthlyQuota: transaction.amount / transaction.quotas
-      };
-
-      return rt;
-    })
+  getReportTransactions() {
+    return this.http.get<ReportTransactionModel[]>(`${this.baseApiUrl}/Transactions/ReportTransaction`);
   }
 
   saveTransaction(transaction: TransactionModel) {

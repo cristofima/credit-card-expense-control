@@ -4,6 +4,7 @@ using CreditCardExpenseControl.API.DbContexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CreditCardExpenseControl.API.Migrations
 {
     [DbContext(typeof(CreditCardExpenseControlContext))]
-    partial class CreditCardExpenseControlContextModelSnapshot : ModelSnapshot
+    [Migration("20231012145936_RecurringPayment")]
+    partial class RecurringPayment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,7 +32,7 @@ namespace CreditCardExpenseControl.API.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Brand")
-                        .HasColumnType("nvarchar(25)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CutOffDay")
                         .HasColumnType("int");
@@ -47,7 +50,7 @@ namespace CreditCardExpenseControl.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(30)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -67,7 +70,7 @@ namespace CreditCardExpenseControl.API.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("Date")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -82,7 +85,7 @@ namespace CreditCardExpenseControl.API.Migrations
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("RecurringPaymentEndDate")
-                        .HasColumnType("date");
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

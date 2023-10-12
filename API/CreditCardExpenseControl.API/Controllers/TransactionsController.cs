@@ -1,5 +1,6 @@
 ﻿using CreditCardExpenseControl.API.DbContexts;
 using CreditCardExpenseControl.API.Entities;
+using CreditCardExpenseControl.API.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,6 +22,32 @@ namespace CreditCardExpenseControl.API.Controllers
         public async Task<ActionResult<IEnumerable<Transaction>>> GetTransactions()
         {
             return await _context.Transactions.ToListAsync();
+        }
+
+        // GET: api/Transactions
+        [HttpGet]
+        [Route("ReportTransaction")]
+        public ActionResult<IEnumerable<ReportTransactionModel>> GetReportTransaction()
+        {
+            return _context.Transactions.Select(t => new ReportTransactionModel
+            {
+                Quotas = t.Quotas,
+                Amount = t.Amount,
+                GraceMonths = t.GraceMonths,
+                Date = t.Date,
+                CreditCard = new CreditCardModel
+                {
+                    Brand = t.CreditCard.Brand,
+                    Id = t.CreditCard.Id,
+                    Last4Digits = t.CreditCard.Last4Digits,
+                    Name = t.CreditCard.Name
+                },
+                AproxMonthlyQuota = Math.Round(t.Amount / t.Quotas, 2),
+                Description = t.Description,
+                Id = t.Id,
+                IsRecurringPayment = t.IsRecurringPayment,
+                RecurringPaymentEndDate = t.RecurringPaymentEndDate
+            }).AsNoTracking().ToList();
         }
 
         // GET: api/Transactions/5

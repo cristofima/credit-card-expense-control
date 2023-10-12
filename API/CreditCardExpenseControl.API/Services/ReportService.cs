@@ -107,7 +107,9 @@ namespace CreditCardExpenseControl.API.Services
                     },
                     AproxMonthlyQuota = Math.Round(t.Amount / t.Quotas, 2),
                     Description = t.Description,
-                    Id = t.Id
+                    Id = t.Id,
+                    IsRecurringPayment = t.IsRecurringPayment,
+                    RecurringPaymentEndDate = t.RecurringPaymentEndDate
                 }).AsNoTracking().ToList();
 
                 _memoryCache.Set("REPORT_TRANSACTIONS", reportTransactions, cacheEntryOptions);

@@ -27,6 +27,7 @@ import { KeyFilterModule } from 'primeng/keyfilter';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
+import { CheckboxModule } from 'primeng/checkbox';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { TooltipModule } from 'primeng/tooltip';
     KeyFilterModule,
     RadioButtonModule,
     BadgeModule,
-    TooltipModule
+    TooltipModule,
+    CheckboxModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
