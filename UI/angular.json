@@ -65,10 +65,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "credit-card-expense-control:build:production"
+              "buildTarget": "credit-card-expense-control:build:production"
             },
             "development": {
-              "browserTarget": "credit-card-expense-control:build:development"
+              "buildTarget": "credit-card-expense-control:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -76,7 +76,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "credit-card-expense-control:build"
+            "buildTarget": "credit-card-expense-control:build"
           }
         },
         "test": {
