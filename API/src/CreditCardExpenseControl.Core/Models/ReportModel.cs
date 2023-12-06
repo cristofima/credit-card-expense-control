@@ -1,4 +1,4 @@
-﻿namespace CreditCardExpenseControl.API.Models
+﻿namespace CreditCardExpenseControl.Core.Models
 {
     public class ReportModel
     {

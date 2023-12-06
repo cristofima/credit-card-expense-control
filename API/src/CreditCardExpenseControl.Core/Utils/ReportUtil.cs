@@ -1,6 +1,6 @@
-﻿using CreditCardExpenseControl.API.Models;
+﻿using CreditCardExpenseControl.Core.Models;
 
-namespace CreditCardExpenseControl.API.Utils
+namespace CreditCardExpenseControl.Core.Utils
 {
     public static class ReportUtil
     {
@@ -65,7 +65,7 @@ namespace CreditCardExpenseControl.API.Utils
             return newTransactions;
         }
 
-        private static (int, int) GetFirstPaymentMonthYear(int month, int year, int cutOffDay, int purchaseYear, int purchaseMonth, int purchaseDay)
+        public static (int, int) GetFirstPaymentMonthYear(int month, int year, int cutOffDay, int purchaseYear, int purchaseMonth, int purchaseDay)
         {
             int lastDayOfTheMonth = DateTime.DaysInMonth(year, month);
             int firstPaymentMonth;
@@ -101,14 +101,14 @@ namespace CreditCardExpenseControl.API.Utils
                 }
                 else
                 {
-                    if (purchaseMonth == 12)
+                    firstPaymentMonth = purchaseMonth + 2;
+                    if(firstPaymentMonth > 12)
                     {
-                        firstPaymentMonth = 1;
                         firstPaymentYear = purchaseYear + 1;
+                        firstPaymentMonth = firstPaymentMonth - 12;
                     }
                     else
                     {
-                        firstPaymentMonth = purchaseMonth + 2;
                         firstPaymentYear = purchaseYear;
                     }
                 }

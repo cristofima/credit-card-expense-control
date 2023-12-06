@@ -3,7 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCardExpenseControl.API", "CreditCardExpenseControl.API\CreditCardExpenseControl.API.csproj", "{39C26029-E8DA-4990-8E7F-AB258712C5E8}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{2F1AF197-7B0B-4153-B204-7CE1904D6565}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3933FA59-8123-420A-9928-039B761C9C1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCardExpenseControl.UnitTests", "tests\CreditCardExpenseControl.UnitTests\CreditCardExpenseControl.UnitTests.csproj", "{B6BA5B39-5B7A-42B3-B5A0-295D086B20D8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreditCardExpenseControl.Core", "src\CreditCardExpenseControl.Core\CreditCardExpenseControl.Core.csproj", "{28808DD6-8DA7-4EE4-A6CD-AA1FF37CBE20}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CreditCardExpenseControl.API", "src\CreditCardExpenseControl.API\CreditCardExpenseControl.API.csproj", "{C378E665-B010-464A-87D3-890D1E1F4A5A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +19,26 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{39C26029-E8DA-4990-8E7F-AB258712C5E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{39C26029-E8DA-4990-8E7F-AB258712C5E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{39C26029-E8DA-4990-8E7F-AB258712C5E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{39C26029-E8DA-4990-8E7F-AB258712C5E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6BA5B39-5B7A-42B3-B5A0-295D086B20D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6BA5B39-5B7A-42B3-B5A0-295D086B20D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6BA5B39-5B7A-42B3-B5A0-295D086B20D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6BA5B39-5B7A-42B3-B5A0-295D086B20D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28808DD6-8DA7-4EE4-A6CD-AA1FF37CBE20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28808DD6-8DA7-4EE4-A6CD-AA1FF37CBE20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28808DD6-8DA7-4EE4-A6CD-AA1FF37CBE20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28808DD6-8DA7-4EE4-A6CD-AA1FF37CBE20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C378E665-B010-464A-87D3-890D1E1F4A5A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C378E665-B010-464A-87D3-890D1E1F4A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C378E665-B010-464A-87D3-890D1E1F4A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C378E665-B010-464A-87D3-890D1E1F4A5A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B6BA5B39-5B7A-42B3-B5A0-295D086B20D8} = {2F1AF197-7B0B-4153-B204-7CE1904D6565}
+		{28808DD6-8DA7-4EE4-A6CD-AA1FF37CBE20} = {3933FA59-8123-420A-9928-039B761C9C1E}
+		{C378E665-B010-464A-87D3-890D1E1F4A5A} = {3933FA59-8123-420A-9928-039B761C9C1E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B76BF8D2-62CA-47F9-9F66-C64A60611848}

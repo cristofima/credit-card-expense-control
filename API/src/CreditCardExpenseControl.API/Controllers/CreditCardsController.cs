@@ -1,5 +1,5 @@
 ﻿using CreditCardExpenseControl.API.DbContexts;
-using CreditCardExpenseControl.API.Entities;
+using CreditCardExpenseControl.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 

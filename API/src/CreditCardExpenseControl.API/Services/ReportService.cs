@@ -1,7 +1,7 @@
 ﻿using CreditCardExpenseControl.API.DbContexts;
-using CreditCardExpenseControl.API.Entities;
-using CreditCardExpenseControl.API.Models;
-using CreditCardExpenseControl.API.Utils;
+using CreditCardExpenseControl.Core.Entities;
+using CreditCardExpenseControl.Core.Models;
+using CreditCardExpenseControl.Core.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 

@@ -1,5 +1,5 @@
-﻿using CreditCardExpenseControl.API.Models;
-using CreditCardExpenseControl.API.Services;
+﻿using CreditCardExpenseControl.API.Services;
+using CreditCardExpenseControl.Core.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CreditCardExpenseControl.API.Controllers

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CreditCardExpenseControl.API.Entities
+namespace CreditCardExpenseControl.Core.Entities
 {
     public class CreditCard
     {

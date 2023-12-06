@@ -1,4 +1,4 @@
-﻿using CreditCardExpenseControl.API.Entities;
+﻿using CreditCardExpenseControl.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace CreditCardExpenseControl.API.DbContexts
