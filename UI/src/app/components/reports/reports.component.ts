@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SelectItem } from 'primeng/api';
 import { lastValueFrom } from 'rxjs/internal/lastValueFrom';
-import { ReportModel } from 'src/app/models/report.model';
+import { MinimalReportModel, ReportModel } from 'src/app/models/report.model';
 import { ReportTransactionModel } from 'src/app/models/transaction.model';
 import { ReportService } from 'src/app/services/report.service';
 
@@ -16,7 +16,7 @@ export class ReportsComponent implements OnInit {
 
   transactionsReport: ReportTransactionModel[] = [];
   report: ReportModel[] = [];
-  summary!: ReportModel;
+  summary!: MinimalReportModel;
 
   year!: number;
   month!: number;
@@ -113,7 +113,15 @@ export class ReportsComponent implements OnInit {
         else if (month == 11) this.summary.november += r.november;
         else if (month == 12) this.summary.december += r.december;
       });
+
+      this.setTotalAnnual(r);
     });
+
+    this.setTotalAnnual(this.summary);
+  }
+
+  private setTotalAnnual(report: MinimalReportModel) {
+    report.totalAnnual = report.january + report.february + report.march + report.april + report.may + report.june + report.july + report.august + report.september + report.october + report.november + report.december;
   }
 
 }

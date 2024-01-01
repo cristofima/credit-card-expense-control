@@ -22,10 +22,11 @@
         <th>Octubre</th>
         <th>Noviembre</th>
         <th>Diciembre</th>
+        <th>TOTAL</th>
       </tr>
     </ng-template>
     <ng-template pTemplate="body" let-report>
-      <tr>
+      <tr class="table-format">
         <td>
           <div class="flex align-items-center gap-2">
             <div> {{report.creditCard.name}} ({{report.creditCard.last4Digits}})</div>
@@ -44,10 +45,11 @@
         <td>{{report.october | currency}}</td>
         <td>{{report.november | currency}}</td>
         <td>{{report.december | currency}}</td>
+        <td><b>{{report.totalAnnual | currency}}</b></td>
       </tr>
     </ng-template>
     <ng-template pTemplate="footer">
-      <tr *ngIf="summary">
+      <tr *ngIf="summary" class="table-format">
         <td>TOTAL</td>
         <td>{{summary.january | currency}}</td>
         <td>{{summary.february | currency}}</td>
@@ -61,6 +63,7 @@
         <td>{{summary.october | currency}}</td>
         <td>{{summary.november | currency}}</td>
         <td>{{summary.december | currency}}</td>
+        <td>{{summary.totalAnnual | currency}}</td>
       </tr>
     </ng-template>
   </p-table>
