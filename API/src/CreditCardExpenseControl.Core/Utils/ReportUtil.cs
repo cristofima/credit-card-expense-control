@@ -14,14 +14,15 @@ namespace CreditCardExpenseControl.Core.Utils
                 int purchaseDay = purchaseDate.Day;
                 int purchaseMonth = purchaseDate.Month;
                 int purchaseYear = purchaseDate.Year;
-                var (firstPaymentMonth, firstPaymentYear) = GetFirstPaymentMonthYear(month, year, cutOffDay, purchaseYear, purchaseMonth, purchaseDay);
+                var (firstPaymentMonth, firstPaymentYear) = GetFirstPaymentMonthYear(cutOffDay, purchaseYear, purchaseMonth, purchaseDay);
 
                 if (transaction.Quotas == 1)
                 {
                     if (firstPaymentMonth == month && firstPaymentYear == year)
                     {
                         newTransactions.Add(transaction);
-                    }else if (transaction.IsRecurringPayment)
+                    }
+                    else if (transaction.IsRecurringPayment)
                     {
                         var currentDate = new DateTime(year, month, 1);
                         var firstPaymentDate = new DateTime(firstPaymentYear, firstPaymentMonth, 1);
@@ -35,7 +36,7 @@ namespace CreditCardExpenseControl.Core.Utils
                 else
                 {
                     var firstPaymentDate = new DateTime(firstPaymentYear, firstPaymentMonth, 1);
-                    if(transaction.GraceMonths > 0)
+                    if (transaction.GraceMonths > 0)
                     {
                         firstPaymentDate = firstPaymentDate.AddMonths(transaction.GraceMonths);
                         firstPaymentYear = firstPaymentDate.Year;
@@ -47,7 +48,7 @@ namespace CreditCardExpenseControl.Core.Utils
 
                     if (currentDate >= firstPaymentDate && currentDate <= lastPaymentDate)
                     {
-                        if(firstPaymentYear == year && firstPaymentMonth == month)
+                        if (firstPaymentYear == year && firstPaymentMonth == month)
                         {
                             var cloneTransaction = transaction.Clone() as ReportTransactionModel;
                             cloneTransaction.AproxMonthlyQuota = transaction.AproxMonthlyQuota + (transaction.Amount * deferredContributionPercentage / 100);
@@ -65,9 +66,9 @@ namespace CreditCardExpenseControl.Core.Utils
             return newTransactions;
         }
 
-        public static (int, int) GetFirstPaymentMonthYear(int month, int year, int cutOffDay, int purchaseYear, int purchaseMonth, int purchaseDay)
+        public static (int, int) GetFirstPaymentMonthYear(int cutOffDay, int purchaseYear, int purchaseMonth, int purchaseDay)
         {
-            int lastDayOfTheMonth = DateTime.DaysInMonth(year, month);
+            int lastDayOfTheMonth = DateTime.DaysInMonth(purchaseYear, purchaseMonth);
             int firstPaymentMonth;
             int firstPaymentYear;
 
@@ -94,23 +95,23 @@ namespace CreditCardExpenseControl.Core.Utils
             }
             else
             {
-                if (cutOffDay + 15 <= lastDayOfTheMonth && purchaseMonth < 12)
+                if (cutOffDay + 15 <= lastDayOfTheMonth)
                 {
                     firstPaymentMonth = purchaseMonth + 1;
-                    firstPaymentYear = purchaseYear;
                 }
                 else
                 {
                     firstPaymentMonth = purchaseMonth + 2;
-                    if(firstPaymentMonth > 12)
-                    {
-                        firstPaymentYear = purchaseYear + 1;
-                        firstPaymentMonth = firstPaymentMonth - 12;
-                    }
-                    else
-                    {
-                        firstPaymentYear = purchaseYear;
-                    }
+                }
+
+                if (firstPaymentMonth > 12)
+                {
+                    firstPaymentMonth -= 12;
+                    firstPaymentYear = purchaseYear + 1;
+                }
+                else
+                {
+                    firstPaymentYear = purchaseYear;
                 }
             }
 
