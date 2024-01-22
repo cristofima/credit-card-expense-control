@@ -28,6 +28,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { BadgeModule } from 'primeng/badge';
 import { TooltipModule } from 'primeng/tooltip';
 import { CheckboxModule } from 'primeng/checkbox';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @NgModule({
   declarations: [
@@ -59,7 +60,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     RadioButtonModule,
     BadgeModule,
     TooltipModule,
-    CheckboxModule
+    CheckboxModule,
+    InputSwitchModule
   ],
   providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]

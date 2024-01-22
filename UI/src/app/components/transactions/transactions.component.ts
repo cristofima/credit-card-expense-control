@@ -22,6 +22,7 @@ export class TransactionsComponent implements OnInit {
   visible = false;
   isEdit = false;
   loading = false;
+  maxDate: Date = new Date();
 
   transactionTypes: any[] = [
     { name: 'Corriente', key: 'C' },

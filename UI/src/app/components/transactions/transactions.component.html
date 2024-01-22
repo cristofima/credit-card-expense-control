@@ -123,7 +123,7 @@
 
         <label for="date">Fecha de Compra</label>
         <p-calendar inputId="date" formControlName="date" appendTo="body" [showIcon]="true" [readonlyInput]="true"
-          [showButtonBar]="true"></p-calendar>
+          [showButtonBar]="true" [maxDate]="maxDate"></p-calendar>
         <label for="amount">Monto Total</label>
         <p-inputNumber inputId="amount" formControlName="amount" [min]="0.01" mode="decimal" [maxFractionDigits]="2">
         </p-inputNumber>

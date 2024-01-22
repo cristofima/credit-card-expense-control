@@ -5,6 +5,12 @@
 
   <br />
 
+
+  <div class="flex justify-content-center gap-2">
+    <label for="switch1">Mostrar mapa de colores</label>
+    <p-inputSwitch inputId="switch1" [(ngModel)]="showColors"></p-inputSwitch>
+  </div>
+
   <p-table [value]="report" [tableStyle]="{'min-width': '70rem'}" [loading]="yearLoading">
     <ng-template pTemplate="caption">Año {{year}}</ng-template>
     <ng-template pTemplate="header">
@@ -25,7 +31,7 @@
         <th>TOTAL</th>
       </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-report>
+    <ng-template pTemplate="body" let-report let-rowIndex="rowIndex">
       <tr class="table-format">
         <td>
           <div class="flex align-items-center gap-2">
@@ -33,36 +39,78 @@
             <img src="assets/icons/{{report.creditCard.brand}}.png" />
           </div>
         </td>
-        <td>{{report.january | currency}}</td>
-        <td>{{report.february | currency}}</td>
-        <td>{{report.march | currency}}</td>
-        <td>{{report.april | currency}}</td>
-        <td>{{report.may | currency}}</td>
-        <td>{{report.june | currency}}</td>
-        <td>{{report.july | currency}}</td>
-        <td>{{report.august | currency}}</td>
-        <td>{{report.september | currency}}</td>
-        <td>{{report.october | currency}}</td>
-        <td>{{report.november | currency}}</td>
-        <td>{{report.december | currency}}</td>
-        <td><b>{{report.totalAnnual | currency}}</b></td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.january, 'january') : ''}">
+          {{report.january |
+          currency}}</td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.february, 'february'): ''}">
+          {{report.february |
+          currency}}</td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.march, 'march'): ''}">
+          {{report.march |
+          currency}}
+        </td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.april, 'april'): ''}">
+          {{report.april |
+          currency}}
+        </td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.may, 'may'): ''}">{{report.may
+          | currency}}
+        </td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.june, 'june') : ''}">
+          {{report.june | currency}}
+        </td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.july, 'july'): ''}">
+          {{report.july | currency}}
+        </td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.august, 'august'): ''}">
+          {{report.august |
+          currency}}</td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.september, 'september'): ''}">
+          {{report.september
+          |
+          currency}}</td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.october, 'october'): ''}">
+          {{report.october |
+          currency}}</td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.november, 'november'): ''}">
+          {{report.november |
+          currency}}</td>
+        <td [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.december, 'december') : ''}">
+          {{report.december |
+          currency}}</td>
+        <td
+          [ngStyle]="{'background-color': showColors ? calculateBackgroundColor(report.totalAnnual, 'totalAnnual') : ''}">
+          <b>{{report.totalAnnual | currency}}</b>
+        </td>
       </tr>
     </ng-template>
     <ng-template pTemplate="footer">
       <tr *ngIf="summary" class="table-format">
         <td>TOTAL</td>
-        <td>{{summary.january | currency}}</td>
-        <td>{{summary.february | currency}}</td>
-        <td>{{summary.march | currency}}</td>
-        <td>{{summary.april | currency}}</td>
-        <td>{{summary.may | currency}}</td>
-        <td>{{summary.june | currency}}</td>
-        <td>{{summary.july | currency}}</td>
-        <td>{{summary.august | currency}}</td>
-        <td>{{summary.september | currency}}</td>
-        <td>{{summary.october | currency}}</td>
-        <td>{{summary.november | currency}}</td>
-        <td>{{summary.december | currency}}</td>
+        <td>
+          {{summary.january | currency}}</td>
+        <td>
+          {{summary.february | currency}}</td>
+        <td>{{summary.march |
+          currency}}</td>
+        <td>{{summary.april |
+          currency}}</td>
+        <td>{{summary.may | currency}}
+        </td>
+        <td>{{summary.june |
+          currency}}</td>
+        <td>{{summary.july |
+          currency}}</td>
+        <td>{{summary.august |
+          currency}}</td>
+        <td>{{summary.september |
+          currency}}</td>
+        <td>{{summary.october |
+          currency}}</td>
+        <td>{{summary.november |
+          currency}}</td>
+        <td>{{summary.december |
+          currency}}</td>
         <td>{{summary.totalAnnual | currency}}</td>
       </tr>
     </ng-template>

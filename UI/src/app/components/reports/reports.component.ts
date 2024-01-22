@@ -28,6 +28,8 @@ export class ReportsComponent implements OnInit {
   yearLoading = false;
   monthLoading = false;
 
+  showColors = false;
+
   ngOnInit(): void {
     let today = new Date();
     this.year = today.getFullYear();
@@ -118,6 +120,34 @@ export class ReportsComponent implements OnInit {
     });
 
     this.setTotalAnnual(this.summary);
+  }
+
+  calculateBackgroundColor(currentValue: number, field: "january" | "february" | "march" | "april" | "may" | "june" | "july" | "august" | "september" | "october" | "november" | "december" | "totalAnnual") {
+    let values: number[] = [];
+
+    this.report.forEach(r => {
+      let val = r[field];
+      if (val !== undefined) values.push(val);
+    });
+
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+
+    const percentage = (currentValue - min) / (max - min);
+
+    const maxColor = [240, 128, 128]; // Red
+    const minColor = [50, 205, 50]; // Green
+
+    const interpolatedColor = this.interpolateColor(minColor, maxColor, percentage);
+    return `rgb(${interpolatedColor.join(',')})`;
+  }
+
+  private interpolateColor(startColor: number[], endColor: number[], percentage: number): number[] {
+    const resultColor = startColor.map((start, i) =>
+      Math.round(start + percentage * (endColor[i] - start))
+    );
+
+    return resultColor;
   }
 
   private setTotalAnnual(report: MinimalReportModel) {
