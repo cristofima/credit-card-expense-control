@@ -8,6 +8,8 @@ export interface TransactionModel {
   graceMonths: number;
   isRecurringPayment: boolean;
   recurringPaymentEndDate?: Date;
+  isCashAdvance?: boolean;
+  cashAdvanceFee?: number;
 }
 
 export interface ReportTransactionModel {
@@ -26,4 +28,6 @@ export interface ReportTransactionModel {
   aproxMonthlyQuota: number;
   isRecurringPayment: boolean;
   recurringPaymentEndDate?: Date;
+  isCashAdvance?: boolean;
+  cashAdvanceFee?: number;
 }

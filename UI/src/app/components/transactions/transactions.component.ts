@@ -53,6 +53,12 @@ export class TransactionsComponent implements OnInit {
       isRecurringPayment: new FormControl(false, {
         initialValueIsDefault: true
       }),
+      isCashAdvance: new FormControl(false, {
+        initialValueIsDefault: true
+      }),
+      cashAdvanceFee: new FormControl(0, {
+        initialValueIsDefault: true, validators: Validators.compose([Validators.min(0)])
+      }),
       recurringPaymentEndDate: new FormControl(''),
     });
 
@@ -85,6 +91,8 @@ export class TransactionsComponent implements OnInit {
       graceMonths: transaction.graceMonths,
       transactionType: transaction.quotas > 1 ? this.transactionTypes[1] : this.transactionTypes[0],
       isRecurringPayment: transaction.isRecurringPayment,
+      isCashAdvance: transaction.isCashAdvance,
+      cashAdvanceFee: transaction.isCashAdvance ? transaction.cashAdvanceFee : null,
       recurringPaymentEndDate: transaction.recurringPaymentEndDate ? new Date(transaction.recurringPaymentEndDate) : null
     });
   }
@@ -101,11 +109,16 @@ export class TransactionsComponent implements OnInit {
       amount: this.formGroup.controls['amount'].value,
       quotas: isCurrent ? 1 : this.formGroup.controls['quotas'].value,
       graceMonths: isCurrent ? 0 : this.formGroup.controls['graceMonths'].value,
-      isRecurringPayment: this.formGroup.controls['isRecurringPayment'].value
+      isRecurringPayment: this.formGroup.controls['isRecurringPayment'].value,
+      isCashAdvance: this.formGroup.controls['isCashAdvance'].value
     };
 
     if (transaction.isRecurringPayment) {
       transaction.recurringPaymentEndDate = this.formGroup.controls['recurringPaymentEndDate'].value;
+    }
+
+    if (transaction.isCashAdvance) {
+      transaction.cashAdvanceFee = this.formGroup.controls['cashAdvanceFee'].value
     }
 
     if (this.isEdit) {

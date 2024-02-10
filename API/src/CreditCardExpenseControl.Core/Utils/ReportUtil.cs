@@ -51,7 +51,13 @@ namespace CreditCardExpenseControl.Core.Utils
                         if (firstPaymentYear == year && firstPaymentMonth == month)
                         {
                             var cloneTransaction = transaction.Clone() as ReportTransactionModel;
-                            cloneTransaction.AproxMonthlyQuota = transaction.AproxMonthlyQuota + (transaction.Amount * deferredContributionPercentage / 100);
+                            var aproxMonthlyQuota = transaction.AproxMonthlyQuota + (transaction.Amount * deferredContributionPercentage / 100);
+                            if(transaction.IsCashAdvance && transaction.CashAdvanceFee != null)
+                            {
+                                aproxMonthlyQuota += transaction.CashAdvanceFee.Value;
+                            }
+
+                            cloneTransaction.AproxMonthlyQuota = Math.Round(aproxMonthlyQuota, 2);
 
                             newTransactions.Add(cloneTransaction);
                         }

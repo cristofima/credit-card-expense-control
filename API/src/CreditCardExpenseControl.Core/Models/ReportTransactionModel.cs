@@ -11,6 +11,8 @@
         public int GraceMonths { get; set; }
         public double AproxMonthlyQuota { get; set; }
         public bool IsRecurringPayment { get; set; }
+        public bool IsCashAdvance { get; set; }
+        public double? CashAdvanceFee { get; set; }
         public DateTime? RecurringPaymentEndDate { get; set; }
 
         public object Clone()

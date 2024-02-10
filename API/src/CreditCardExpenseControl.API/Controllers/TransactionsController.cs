@@ -46,6 +46,8 @@ namespace CreditCardExpenseControl.API.Controllers
                 Description = t.Description,
                 Id = t.Id,
                 IsRecurringPayment = t.IsRecurringPayment,
+                IsCashAdvance = t.IsCashAdvance,
+                CashAdvanceFee = t.CashAdvanceFee,
                 RecurringPaymentEndDate = t.RecurringPaymentEndDate
             }).AsNoTracking().ToList();
         }

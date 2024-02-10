@@ -154,6 +154,16 @@
           <p-inputNumber inputId="quotas" formControlName="quotas" [min]="2"> </p-inputNumber>
           <label for="graceMonths">Meses de gracia</label>
           <p-inputNumber inputId="graceMonths" formControlName="graceMonths" [min]="0"> </p-inputNumber>
+
+          <div class="flex align-items-center gap-1">
+            <p-checkbox formControlName="isCashAdvance" [binary]="true" inputId="isCashAdvance"></p-checkbox>
+            <label for="isCashAdvance">¿Es un avance de efectivo?</label>
+          </div>
+
+          <ng-container *ngIf="formGroup.controls['isCashAdvance'].value">
+            <label for="cashAdvanceFee">Tarifa del avance de efectivo</label>
+            <p-inputNumber inputId="cashAdvanceFee" formControlName="cashAdvanceFee" [min]="0"> </p-inputNumber>
+          </ng-container>
         </ng-container>
       </div>
     </div>
