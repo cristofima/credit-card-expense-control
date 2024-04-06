@@ -68,6 +68,9 @@ namespace CreditCardExpenseControl.API.DbContexts
                     .HasDefaultValue(false)
                     .IsRequired();
 
+                entity.Property(e => e.TotalAmountTransaction)
+                    .HasColumnType("decimal(7, 2)");
+
                 entity.Property(e => e.RecurringPaymentEndDate)
                     .HasColumnType("date");
             });

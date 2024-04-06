@@ -128,7 +128,7 @@
     <ng-template pTemplate="header">
       <tr>
         <th>Descripción</th>
-        <th>Monto Total</th>
+        <th>Valor Total</th>
         <th># Cuotas</th>
         <th>Cuota mensual</th>
         <th>Fecha de Compra</th>
@@ -155,7 +155,7 @@
           {{transaction.description}}
         </td>
         <td style="text-align: right;">
-          {{transaction.amount | currency}}
+          {{ transaction.totalAmountTransaction || transaction.amount | currency }}
         </td>
         <td style="text-align: right;">
           {{ transaction.quotas}}

@@ -12,6 +12,7 @@
         public double AproxMonthlyQuota { get; set; }
         public bool IsRecurringPayment { get; set; }
         public bool IsCashAdvance { get; set; }
+        public double? TotalAmountTransaction { get; set; }
         public double? CashAdvanceFee { get; set; }
         public DateTime? RecurringPaymentEndDate { get; set; }
 

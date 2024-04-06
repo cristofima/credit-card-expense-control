@@ -42,11 +42,12 @@ namespace CreditCardExpenseControl.API.Controllers
                     Last4Digits = t.CreditCard.Last4Digits,
                     Name = t.CreditCard.Name
                 },
-                AproxMonthlyQuota = Math.Round(t.Amount / t.Quotas, 2),
+                AproxMonthlyQuota = Math.Round((t.TotalAmountTransaction.HasValue ? t.TotalAmountTransaction.Value : t.Amount) / t.Quotas, 2),
                 Description = t.Description,
                 Id = t.Id,
                 IsRecurringPayment = t.IsRecurringPayment,
                 IsCashAdvance = t.IsCashAdvance,
+                TotalAmountTransaction = t.TotalAmountTransaction,
                 CashAdvanceFee = t.CashAdvanceFee,
                 RecurringPaymentEndDate = t.RecurringPaymentEndDate
             }).AsNoTracking().ToList();

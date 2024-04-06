@@ -17,7 +17,7 @@
         </th>
         <th pSortableColumn="date">Fecha de Compra <p-sortIcon field="date"></p-sortIcon>
         </th>
-        <th pSortableColumn="amount">Monto Total <p-sortIcon field="amount"></p-sortIcon>
+        <th pSortableColumn="amount">Valor Total <p-sortIcon field="amount"></p-sortIcon>
         </th>
         <th pSortableColumn="quotas"># Cuotas <p-sortIcon field="quotas"></p-sortIcon>
         </th>
@@ -76,7 +76,7 @@
         </td>
         <td>{{transaction.date | date}} <p-badge *ngIf="transaction.graceMonths" value="+{{transaction.graceMonths}}"
             pTooltip="{{transaction.graceMonths}} meses de gracia"></p-badge></td>
-        <td style="text-align: right;">{{transaction.amount | currency}}</td>
+        <td style="text-align: right;">{{transaction.totalAmountTransaction || transaction.amount | currency}}</td>
         <td style="text-align: right;">{{transaction.quotas}}</td>
         <td style="text-align: right;">{{transaction.aproxMonthlyQuota | currency}}</td>
         <td>
@@ -124,7 +124,7 @@
         <label for="date">Fecha de Compra</label>
         <p-calendar inputId="date" formControlName="date" appendTo="body" [showIcon]="true" [readonlyInput]="true"
           [showButtonBar]="true" [maxDate]="maxDate"></p-calendar>
-        <label for="amount">Monto Total</label>
+        <label for="amount">Valor</label>
         <p-inputNumber inputId="amount" formControlName="amount" [min]="0.01" mode="decimal" [maxFractionDigits]="2">
         </p-inputNumber>
 
@@ -161,6 +161,11 @@
           </div>
 
           <ng-container *ngIf="formGroup.controls['isCashAdvance'].value">
+            <label for="totalAmountTransaction">Valor total de la transacción</label>
+            <p-inputNumber inputId="totalAmountTransaction" formControlName="totalAmountTransaction" [min]="0"
+              mode="decimal" [maxFractionDigits]="2">
+            </p-inputNumber>
+
             <label for="cashAdvanceFee">Tarifa del avance de efectivo</label>
             <p-inputNumber inputId="cashAdvanceFee" formControlName="cashAdvanceFee" [min]="0"> </p-inputNumber>
           </ng-container>

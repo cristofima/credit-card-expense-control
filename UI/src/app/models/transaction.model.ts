@@ -9,6 +9,7 @@ export interface TransactionModel {
   isRecurringPayment: boolean;
   recurringPaymentEndDate?: Date;
   isCashAdvance?: boolean;
+  totalAmountTransaction?: number;
   cashAdvanceFee?: number;
 }
 
@@ -29,5 +30,6 @@ export interface ReportTransactionModel {
   isRecurringPayment: boolean;
   recurringPaymentEndDate?: Date;
   isCashAdvance?: boolean;
+  totalAmountTransaction?: number;
   cashAdvanceFee?: number;
 }

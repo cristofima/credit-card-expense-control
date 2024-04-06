@@ -59,6 +59,7 @@ export class TransactionsComponent implements OnInit {
       cashAdvanceFee: new FormControl(0, {
         initialValueIsDefault: true, validators: Validators.compose([Validators.min(0)])
       }),
+      totalAmountTransaction: new FormControl(null),
       recurringPaymentEndDate: new FormControl(''),
     });
 
@@ -93,6 +94,7 @@ export class TransactionsComponent implements OnInit {
       isRecurringPayment: transaction.isRecurringPayment,
       isCashAdvance: transaction.isCashAdvance,
       cashAdvanceFee: transaction.isCashAdvance ? transaction.cashAdvanceFee : null,
+      totalAmountTransaction: transaction.isCashAdvance ? transaction.totalAmountTransaction : null,
       recurringPaymentEndDate: transaction.recurringPaymentEndDate ? new Date(transaction.recurringPaymentEndDate) : null
     });
   }
@@ -118,7 +120,8 @@ export class TransactionsComponent implements OnInit {
     }
 
     if (transaction.isCashAdvance) {
-      transaction.cashAdvanceFee = this.formGroup.controls['cashAdvanceFee'].value
+      transaction.cashAdvanceFee = this.formGroup.controls['cashAdvanceFee'].value;
+      transaction.totalAmountTransaction = this.formGroup.controls['totalAmountTransaction'].value;
     }
 
     if (this.isEdit) {
